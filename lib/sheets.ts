@@ -120,7 +120,7 @@ export async function getTimeboxHistory(userId: string): Promise<any[]> {
     });
 
     const rows = response.data.values || [];
-    const userTimeboxes: Timebox[] = [];
+    const userTimeboxes: any[] = [];
 
     // Filtrar timeboxes del usuario y ordenar por fecha (más recientes primero)
     for (const row of rows) {
