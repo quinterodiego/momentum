@@ -43,13 +43,13 @@ export async function getNextDuration(userId: string): Promise<3 | 5 | 10 | 15> 
     const bothAbandoned = lastTwo.every((tb) => tb.status === 'abandoned');
     if (bothAbandoned && currentDuration > 3) {
       // Reducir en un nivel: 15→10, 10→5, 5→3
-      const reductions: Record<TimeboxDuration, TimeboxDuration> = {
+      const reductions: Record<number, number> = {
         15: 10,
         10: 5,
         5: 3,
         3: 3, // Mínimo
       };
-      return reductions[currentDuration];
+      return reductions[currentDuration] as 3 | 5 | 10 | 15;
     }
   }
 
@@ -59,13 +59,13 @@ export async function getNextDuration(userId: string): Promise<3 | 5 | 10 | 15> 
     const allCompleted = lastThree.every((tb) => tb.status === 'completed');
     if (allCompleted && currentDuration < 15) {
       // Aumentar en un nivel: 3→5, 5→10, 10→15
-      const increases: Record<TimeboxDuration, TimeboxDuration> = {
+      const increases: Record<number, number> = {
         3: 5,
         5: 10,
         10: 15,
         15: 15, // Máximo
       };
-      return increases[currentDuration];
+      return increases[currentDuration] as 3 | 5 | 10 | 15;
     }
   }
 
