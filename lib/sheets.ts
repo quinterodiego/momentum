@@ -1,10 +1,11 @@
 /**
  * Integración con Google Sheets como base de datos
- * Maneja todas las operaciones CRUD para tasks, timeboxes y stats
+ * DEPRECATED: Este archivo ya no se usa, la app ahora usa rutinas diarias
+ * Se mantiene solo para compatibilidad con archivos deprecados
  */
 
 import { google } from 'googleapis';
-import type { Task, Timebox, Stats, TimeboxStatus } from './types';
+import type { Stats } from './types';
 
 // Inicializar cliente de Google Sheets
 function getSheetsClient() {
@@ -35,8 +36,9 @@ function checkSheetsConfig() {
 
 /**
  * Obtener todas las tareas activas de un usuario
+ * DEPRECATED: Ya no se usa
  */
-export async function getActiveTask(userId: string): Promise<Task | null> {
+export async function getActiveTask(userId: string): Promise<any | null> {
   if (!checkSheetsConfig()) {
     // Si Google Sheets no está configurado, retornar null
     return null;
@@ -74,8 +76,9 @@ export async function getActiveTask(userId: string): Promise<Task | null> {
 
 /**
  * Crear una nueva tarea
+ * DEPRECATED: Ya no se usa
  */
-export async function createTask(userId: string, title: string): Promise<Task> {
+export async function createTask(userId: string, title: string): Promise<any> {
   const sheets = getSheetsClient();
   const taskId = `task_${Date.now()}`;
   const createdAt = new Date().toISOString();
@@ -105,8 +108,9 @@ export async function createTask(userId: string, title: string): Promise<Task> {
 
 /**
  * Obtener historial de timeboxes de un usuario (últimos 10)
+ * DEPRECATED: Ya no se usa
  */
-export async function getTimeboxHistory(userId: string): Promise<Timebox[]> {
+export async function getTimeboxHistory(userId: string): Promise<any[]> {
   const sheets = getSheetsClient();
 
   try {
@@ -149,12 +153,13 @@ export async function getTimeboxHistory(userId: string): Promise<Timebox[]> {
 
 /**
  * Crear un nuevo timebox
+ * DEPRECATED: Ya no se usa
  */
 export async function createTimebox(
   userId: string,
   taskId: string,
   duration: 3 | 5 | 10 | 15
-): Promise<Timebox> {
+): Promise<any> {
   const sheets = getSheetsClient();
   const timeboxId = `timebox_${Date.now()}`;
   const startedAt = new Date().toISOString();
@@ -186,10 +191,11 @@ export async function createTimebox(
 
 /**
  * Actualizar estado de un timebox
+ * DEPRECATED: Ya no se usa
  */
 export async function updateTimeboxStatus(
   timeboxId: string,
-  status: TimeboxStatus
+  status: string
 ): Promise<void> {
   const sheets = getSheetsClient();
 
@@ -234,7 +240,7 @@ export async function getStats(userId: string): Promise<Stats> {
   try {
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'stats!A2:D',
+      range: 'stats!A2:C',
     });
 
     const rows = response.data.values || [];
@@ -244,8 +250,7 @@ export async function getStats(userId: string): Promise<Stats> {
       return {
         userId: userStats[0],
         streak: parseInt(userStats[1]) || 0,
-        lastCompletedAt: userStats[2] || null,
-        avgDuration: parseFloat(userStats[3]) || 0,
+        lastCompletedDate: userStats[2] || null,
       };
     }
 
@@ -253,8 +258,7 @@ export async function getStats(userId: string): Promise<Stats> {
     return {
       userId,
       streak: 0,
-      lastCompletedAt: null,
-      avgDuration: 0,
+      lastCompletedDate: null,
     };
   } catch (error) {
     console.error('Error obteniendo estadísticas:', error);
@@ -275,7 +279,7 @@ export async function updateStats(
     // Obtener filas existentes
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'stats!A2:D',
+      range: 'stats!A2:C',
     });
 
     const rows = response.data.values || [];
@@ -284,22 +288,20 @@ export async function updateStats(
     const updatedStats: Stats = {
       userId,
       streak: stats.streak ?? parseInt(rows[rowIndex]?.[1] || '0'),
-      lastCompletedAt: stats.lastCompletedAt ?? (rows[rowIndex]?.[2] || null),
-      avgDuration: stats.avgDuration ?? parseFloat(rows[rowIndex]?.[3] || '0'),
+      lastCompletedDate: stats.lastCompletedDate ?? (rows[rowIndex]?.[2] || null),
     };
 
     if (rowIndex === -1) {
       // Crear nueva fila
       await sheets.spreadsheets.values.append({
         spreadsheetId: SPREADSHEET_ID,
-        range: 'stats!A:D',
+        range: 'stats!A:C',
         valueInputOption: 'RAW',
         requestBody: {
           values: [[
             updatedStats.userId,
             updatedStats.streak,
-            updatedStats.lastCompletedAt || '',
-            updatedStats.avgDuration,
+            updatedStats.lastCompletedDate || '',
           ]],
         },
       });
@@ -308,14 +310,13 @@ export async function updateStats(
       const actualRowIndex = rowIndex + 2;
       await sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
-        range: `stats!A${actualRowIndex}:D${actualRowIndex}`,
+        range: `stats!A${actualRowIndex}:C${actualRowIndex}`,
         valueInputOption: 'RAW',
         requestBody: {
           values: [[
             updatedStats.userId,
             updatedStats.streak,
-            updatedStats.lastCompletedAt || '',
-            updatedStats.avgDuration,
+            updatedStats.lastCompletedDate || '',
           ]],
         },
       });
