@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Timer, Hash, Check, Pencil } from 'lucide-react';
+import { X, Timer, Hash, Check, Pencil, XCircle } from 'lucide-react';
 import type { RoutineWithStatus } from '@/lib/types';
 import ValueInputModal from './ValueInputModal';
 import EditValueModal from './EditValueModal';
@@ -84,6 +84,31 @@ export default function RoutineDetailModal({
       }
     } catch (error) {
       console.error('Error actualizando valor:', error);
+    }
+  };
+
+  const handleUnmark = async () => {
+    if (!routine.todayLog?.id) {
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/routines/unmark', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          logId: routine.todayLog.id,
+        }),
+      });
+
+      if (response.ok) {
+        onClose();
+        router.refresh();
+      } else {
+        console.error('Error desmarcando rutina');
+      }
+    } catch (error) {
+      console.error('Error desmarcando rutina:', error);
     }
   };
 
@@ -209,6 +234,17 @@ export default function RoutineDetailModal({
                 >
                   <Pencil size={18} />
                   Editar valor
+                </button>
+              )}
+
+              {routine.completed && (
+                <button
+                  onClick={handleUnmark}
+                  className="btn btn-secondary modal-action-btn"
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', color: 'var(--text-secondary)' }}
+                >
+                  <XCircle size={18} />
+                  Desmarcar como pendiente
                 </button>
               )}
 
