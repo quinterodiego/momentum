@@ -28,6 +28,12 @@ GOOGLE_SHEETS_SPREADSHEET_ID=tu_spreadsheet_id
 GOOGLE_SERVICE_ACCOUNT_EMAIL=tu_service_account_email
 GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 
+**⚠️ IMPORTANTE para GOOGLE_PRIVATE_KEY:**
+- Copia la clave completa del archivo JSON (incluyendo `-----BEGIN PRIVATE KEY-----` y `-----END PRIVATE KEY-----`)
+- En Vercel, pega la clave tal cual está en el JSON, con los `\n` literales
+- O puedes pegar la clave con saltos de línea reales (presiona Enter donde veas `\n`)
+- El código procesará automáticamente ambos formatos
+
 # NextAuth
 NEXTAUTH_URL=https://tu-dominio.vercel.app
 NEXTAUTH_SECRET=genera_un_secreto_aleatorio_aqui

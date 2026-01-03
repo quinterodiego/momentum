@@ -16,10 +16,28 @@ export function getSheetsClient() {
     throw new Error('Google Sheets no está configurado. Por favor, configura las variables de entorno: GOOGLE_SHEETS_SPREADSHEET_ID, GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY');
   }
 
+  // Procesar la clave privada para manejar diferentes formatos
+  // En Vercel, la clave puede venir con \n literales o con saltos de línea reales
+  let processedKey = PRIVATE_KEY;
+  
+  // Si la clave tiene \n literales (string), reemplazarlos con saltos de línea reales
+  if (processedKey.includes('\\n')) {
+    processedKey = processedKey.replace(/\\n/g, '\n');
+  }
+  
+  // Asegurarse de que la clave tenga el formato correcto
+  // Eliminar espacios al inicio y final
+  processedKey = processedKey.trim();
+  
+  // Si la clave no empieza con -----BEGIN, puede que esté mal formateada
+  if (!processedKey.startsWith('-----BEGIN')) {
+    throw new Error('GOOGLE_PRIVATE_KEY tiene un formato inválido. Debe empezar con "-----BEGIN PRIVATE KEY-----"');
+  }
+
   const auth = new google.auth.GoogleAuth({
     credentials: {
       client_email: SERVICE_ACCOUNT_EMAIL,
-      private_key: PRIVATE_KEY.replace(/\\n/g, '\n'),
+      private_key: processedKey,
     },
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
   });
