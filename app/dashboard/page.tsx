@@ -4,6 +4,7 @@
  */
 
 import { redirect } from 'next/navigation';
+import Image from 'next/image';
 import { ListPlus, History } from 'lucide-react';
 import { getRoutinesWithStatus, getTodayDate } from '@/lib/routines';
 import { getStats } from '@/lib/sheets-routines';
@@ -55,7 +56,18 @@ export default async function DashboardPage({
     <div className="container">
       <div className="card">
         <div className="page-header">
-          <h1 className="page-title">Momentum</h1>
+          <h1 className="page-title">
+            <span className="page-title-content">
+              <span>Momentum</span>
+              <Image 
+                src="/cubo.png" 
+                alt="Cubo" 
+                width={32} 
+                height={32} 
+                className="page-title-icon"
+              />
+            </span>
+          </h1>
           <div className="header-actions">
             <a href="/history" className="header-icon" title="Ver historial">
               <History size={20} className="text-primary" />

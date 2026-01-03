@@ -4,6 +4,7 @@
  */
 
 import { redirect } from 'next/navigation';
+import Image from 'next/image';
 import { getUserRoutines } from '@/lib/sheets-routines';
 import { getCurrentUser } from '@/lib/auth';
 import RoutineOnboardingForm from '@/components/RoutineOnboardingForm';
@@ -28,7 +29,18 @@ export default async function OnboardingPage() {
     <div className="container">
       <div className="card onboarding-card">
         <div className="onboarding-header">
-          <h1 className="onboarding-title">Momentum</h1>
+          <h1 className="onboarding-title">
+            <span className="onboarding-title-content">
+              <span>Momentum</span>
+              <Image 
+                src="/cubo.png" 
+                alt="Cubo" 
+                width={40} 
+                height={40} 
+                className="onboarding-title-icon"
+              />
+            </span>
+          </h1>
           <p className="onboarding-subtitle">
             Creá tu primera rutina diaria
           </p>

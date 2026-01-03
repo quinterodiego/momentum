@@ -28,7 +28,18 @@ export default function LandingPageClient() {
                 />
               </div>
               <div className="hero-content">
-                <h1 className="hero-title">Momentum</h1>
+                <h1 className="hero-title">
+                  <span className="hero-title-content">
+                    <span>Momentum</span>
+                    <Image 
+                      src="/cubo.png" 
+                      alt="Cubo" 
+                      width={48} 
+                      height={48} 
+                      className="hero-title-icon"
+                    />
+                  </span>
+                </h1>
                 <p className="hero-subtitle">
                   Rutinas diarias mínimas. Sin presión, sin culpa.
                 </p>
