@@ -1,6 +1,6 @@
 'use client';
 
-import { startTimebox } from '@/app/actions/timebox';
+// DEPRECATED: Este componente ya no se usa, la app ahora usa rutinas diarias
 import { useState } from 'react';
 
 interface StartTimeboxButtonProps {

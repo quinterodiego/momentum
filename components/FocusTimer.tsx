@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { completeTimebox, abandonTimebox } from '@/app/actions/timebox';
-import type { TimeboxDuration } from '@/lib/types';
+// DEPRECATED: Este componente ya no se usa, la app ahora usa rutinas diarias
 
 interface FocusTimerProps {
   timeboxId: string;
