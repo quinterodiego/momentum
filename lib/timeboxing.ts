@@ -88,8 +88,8 @@ export async function updateStatsAfterCompletion(
 
   // Calcular racha (días consecutivos con al menos un timebox completado)
   let streak = 0;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
 
   // Agrupar por día
   const timeboxesByDay = new Map<string, boolean>();
@@ -103,17 +103,17 @@ export async function updateStatsAfterCompletion(
   }
 
   // Calcular racha desde hoy hacia atrás
-  let currentDay = new Date(today);
+  let currentDay = new Date(todayDate);
   while (timeboxesByDay.has(currentDay.toISOString())) {
     streak++;
     currentDay.setDate(currentDay.getDate() - 1);
   }
 
   // Actualizar stats (solo streak y lastCompletedDate, sin avgDuration)
-  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  const todayStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
   await updateStats(userId, {
     streak,
-    lastCompletedDate: status === 'completed' ? today : null,
+    lastCompletedDate: status === 'completed' ? todayStr : null,
   });
 }
 
