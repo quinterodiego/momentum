@@ -1,33 +1,13 @@
+/**
+ * DEPRECATED: Este componente ya no se usa
+ * La app ahora usa rutinas diarias
+ * Se mantiene solo para referencia histórica
+ */
+
 'use client';
 
-// DEPRECATED: Este componente ya no se usa, la app ahora usa rutinas diarias
-import { useState } from 'react';
-
-interface StartTimeboxButtonProps {
-  userId: string;
-}
-
-export default function StartTimeboxButton({ userId }: StartTimeboxButtonProps) {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleClick = async () => {
-    setIsLoading(true);
-    try {
-      await startTimebox(userId);
-    } catch (error) {
-      console.error('Error iniciando timebox:', error);
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <button
-      onClick={handleClick}
-      disabled={isLoading}
-      className="btn btn-primary"
-    >
-      {isLoading ? 'Preparando...' : 'Estoy procrastinando'}
-    </button>
-  );
+// Este componente está deprecado y no se usa en la versión actual
+export default function StartTimeboxButton() {
+  return null;
 }
 
