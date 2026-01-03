@@ -9,7 +9,7 @@
  */
 
 import { getTimeboxHistory, updateStats } from './sheets';
-import type { TimeboxDuration, TimeboxStatus } from './types';
+// DEPRECATED: Este archivo ya no se usa, la app ahora usa rutinas diarias
 
 /**
  * Analiza el historial del usuario para determinar la próxima duración
@@ -78,8 +78,8 @@ export async function getNextDuration(userId: string): Promise<3 | 5 | 10 | 15> 
  */
 export async function updateStatsAfterCompletion(
   userId: string,
-  duration: TimeboxDuration,
-  status: TimeboxStatus
+  duration: number,
+  status: string
 ): Promise<void> {
   const history = await getTimeboxHistory(userId);
   const completedTimeboxes = history.filter(
