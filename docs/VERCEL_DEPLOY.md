@@ -121,7 +121,29 @@ Si agregas un dominio personalizado:
 
 ### Error: "Google Sheets no está configurado"
 - Verifica que todas las variables de entorno estén configuradas
-- Asegúrate de que `GOOGLE_PRIVATE_KEY` tenga los `\n` correctos
+- Asegúrate de que `GOOGLE_PRIVATE_KEY` tenga el formato correcto
+
+### Error: "DECODER routines::unsupported" o "ERR_OSSL_UNSUPPORTED"
+Este error indica que la clave privada no está en el formato correcto. Soluciones:
+
+**Opción 1: Usar formato con `\n` literales (recomendado)**
+```
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC...\n-----END PRIVATE KEY-----\n"
+```
+- Copia la clave completa del JSON
+- Mantén los `\n` literales (no los reemplaces)
+- Asegúrate de que esté entre comillas dobles
+
+**Opción 2: Usar saltos de línea reales**
+- En Vercel, puedes pegar la clave con saltos de línea reales
+- El código procesará automáticamente ambos formatos
+- Asegúrate de que la clave empiece con `-----BEGIN PRIVATE KEY-----`
+
+**Verificación:**
+- La clave debe empezar con `-----BEGIN PRIVATE KEY-----`
+- La clave debe terminar con `-----END PRIVATE KEY-----`
+- No debe tener espacios extra al inicio o final
+- Si copias del JSON, incluye las comillas del JSON pero luego agrega comillas dobles en Vercel
 
 ### Error: "NEXTAUTH_SECRET is missing"
 - Genera un nuevo secreto: `openssl rand -base64 32`
