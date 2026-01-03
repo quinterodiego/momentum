@@ -109,21 +109,11 @@ export async function updateStatsAfterCompletion(
     currentDay.setDate(currentDay.getDate() - 1);
   }
 
-  // Calcular duración promedio (solo de completados)
-  const completedDurations = completedTimeboxes
-    .filter((tb) => tb.status === 'completed')
-    .map((tb) => tb.duration);
-
-  const avgDuration =
-    completedDurations.length > 0
-      ? completedDurations.reduce((a, b) => a + b, 0) / completedDurations.length
-      : duration;
-
-  // Actualizar stats
+  // Actualizar stats (solo streak y lastCompletedDate, sin avgDuration)
+  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
   await updateStats(userId, {
     streak,
-    lastCompletedAt: status === 'completed' ? new Date().toISOString() : null,
-    avgDuration: Math.round(avgDuration * 10) / 10, // Redondear a 1 decimal
+    lastCompletedDate: status === 'completed' ? today : null,
   });
 }
 
