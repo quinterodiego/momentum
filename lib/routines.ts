@@ -11,19 +11,32 @@ import type { Routine, DailyLog, RoutineWithStatus } from './types';
  */
 export async function getRoutinesWithStatus(userId: string): Promise<RoutineWithStatus[]> {
   const routines = await getUserRoutines(userId);
+  const today = getTodayDate();
   const todayLogs = await getTodayLogs(userId);
   
-  // Formatear fecha de hoy como YYYY-MM-DD
-  const today = new Date().toISOString().split('T')[0];
+  // Debug: Log para verificar
+  console.log('getRoutinesWithStatus - Fecha de hoy:', today);
+  console.log('getRoutinesWithStatus - Logs de hoy encontrados:', todayLogs.length);
+  console.log('getRoutinesWithStatus - Fechas de logs:', todayLogs.map(l => l.date));
   
   return routines.map((routine) => {
+    // Buscar log de hoy para esta rutina
+    // IMPORTANTE: Solo considerar logs con fecha exacta de hoy
     const todayLog = todayLogs.find(
-      (log) => log.routineId === routine.id && log.date === today
+      (log) => log.routineId === routine.id && log.date === today && log.completed === true
     );
+    
+    // Debug: Log para cada rutina
+    if (todayLog) {
+      console.log(`Rutina "${routine.title}": completada hoy (${todayLog.date})`);
+    } else {
+      console.log(`Rutina "${routine.title}": pendiente (no hay log de hoy)`);
+    }
     
     return {
       ...routine,
-      completed: todayLog?.completed || false,
+      // Solo marcar como completada si hay un log de HOY con completed=true
+      completed: todayLog?.completed === true || false,
       todayLog: todayLog || null,
     };
   });
@@ -31,9 +44,24 @@ export async function getRoutinesWithStatus(userId: string): Promise<RoutineWith
 
 /**
  * Obtener fecha de hoy en formato YYYY-MM-DD
+ * Usa la zona horaria de Argentina (America/Argentina/Buenos_Aires)
+ * para evitar problemas con UTC en el servidor
  */
 export function getTodayDate(): string {
-  return new Date().toISOString().split('T')[0];
+  const now = new Date();
+  
+  // Usar Intl.DateTimeFormat para obtener la fecha en zona horaria de Argentina
+  // Esto asegura que la fecha sea correcta independientemente de dónde esté el servidor
+  const timezone = 'America/Argentina/Buenos_Aires';
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: timezone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+  
+  // Formato 'en-CA' devuelve YYYY-MM-DD directamente
+  return formatter.format(now);
 }
 
 /**
@@ -66,9 +94,20 @@ export async function calculateStreak(userId: string): Promise<number> {
       return stats.streak;
     } else {
       // Primera vez que cumple hoy
-      const yesterday = new Date();
+      // Calcular ayer en la misma zona horaria
+      const now = new Date();
+      const yesterday = new Date(now);
       yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.toISOString().split('T')[0];
+      
+      const timezone = 'America/Argentina/Buenos_Aires';
+      const formatter = new Intl.DateTimeFormat('en-CA', {
+        timeZone: timezone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+      
+      const yesterdayStr = formatter.format(yesterday);
       
       if (stats.lastCompletedDate === yesterdayStr) {
         // Cumplió ayer también, aumentar racha

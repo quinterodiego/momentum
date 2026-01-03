@@ -124,7 +124,58 @@ export async function createRoutine(
  */
 export async function getTodayLogs(userId: string): Promise<DailyLog[]> {
   const { sheets, spreadsheetId } = getSheetsClient();
-  const today = new Date().toISOString().split('T')[0];
+  // Usar la función getTodayDate de lib/routines para consistencia
+  const { getTodayDate } = await import('./routines');
+  const today = getTodayDate();
+
+  try {
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: 'daily_logs!A2:F',
+    });
+
+    const rows = response.data.values || [];
+    const logs: DailyLog[] = [];
+
+    // Debug: Log para verificar la fecha y los logs encontrados
+    console.log('Buscando logs para fecha:', today);
+    console.log('Total de filas en daily_logs:', rows.length);
+
+    for (const row of rows) {
+      // Solo procesar logs del usuario
+      if (row[2] === userId) {
+        const logDate = row[3];
+        // Debug: Log todas las fechas encontradas para este usuario
+        if (logDate) {
+          console.log(`Log encontrado - fecha: ${logDate}, hoy: ${today}, coincide: ${logDate === today}`);
+        }
+        
+        if (logDate === today) {
+          logs.push({
+            id: row[0],
+            routineId: row[1],
+            userId: row[2],
+            date: row[3],
+            completed: row[4] === 'TRUE',
+            value: parseFloat(row[5]) || 0,
+          });
+        }
+      }
+    }
+
+    console.log(`Logs de hoy encontrados: ${logs.length}`);
+    return logs;
+  } catch (error) {
+    console.error('Error obteniendo logs de hoy:', error);
+    throw error;
+  }
+}
+
+/**
+ * Obtener todos los logs de un usuario (historial completo)
+ */
+export async function getAllLogs(userId: string): Promise<DailyLog[]> {
+  const { sheets, spreadsheetId } = getSheetsClient();
 
   try {
     const response = await sheets.spreadsheets.values.get({
@@ -136,7 +187,7 @@ export async function getTodayLogs(userId: string): Promise<DailyLog[]> {
     const logs: DailyLog[] = [];
 
     for (const row of rows) {
-      if (row[2] === userId && row[3] === today) {
+      if (row[2] === userId && row[4] === 'TRUE') {
         logs.push({
           id: row[0],
           routineId: row[1],
@@ -148,9 +199,10 @@ export async function getTodayLogs(userId: string): Promise<DailyLog[]> {
       }
     }
 
-    return logs;
+    // Ordenar por fecha descendente (más reciente primero)
+    return logs.sort((a, b) => b.date.localeCompare(a.date));
   } catch (error) {
-    console.error('Error obteniendo logs de hoy:', error);
+    console.error('Error obteniendo historial de logs:', error);
     throw error;
   }
 }

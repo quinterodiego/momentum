@@ -4,7 +4,7 @@
  */
 
 import { redirect } from 'next/navigation';
-import { ListPlus } from 'lucide-react';
+import { ListPlus, History } from 'lucide-react';
 import { getRoutinesWithStatus, getTodayDate } from '@/lib/routines';
 import { getStats } from '@/lib/sheets-routines';
 import { getCurrentUser } from '@/lib/auth';
@@ -24,9 +24,20 @@ export default async function DashboardPage({
   }
 
   const userId = user.id;
+  const today = getTodayDate();
+  
+  // Debug: Log la fecha de hoy para verificar
+  console.log('Fecha de hoy calculada:', today);
+  
   const routines = await getRoutinesWithStatus(userId);
   const stats = await getStats(userId);
-  const today = getTodayDate();
+  
+  // Debug: Log las rutinas y sus estados
+  console.log('Rutinas obtenidas:', routines.map(r => ({
+    title: r.title,
+    completed: r.completed,
+    todayLog: r.todayLog ? { date: r.todayLog.date, completed: r.todayLog.completed } : null
+  })));
 
   // Mensajes según el resultado
   let statusMessage = '';
@@ -45,9 +56,14 @@ export default async function DashboardPage({
       <div className="card">
         <div className="page-header">
           <h1 className="page-title">Momentum</h1>
-          <a href="/settings" className="header-icon" title="Agregar rutina">
-            <ListPlus size={20} className="text-primary" />
-          </a>
+          <div className="header-actions">
+            <a href="/history" className="header-icon" title="Ver historial">
+              <History size={20} className="text-primary" />
+            </a>
+            <a href="/settings" className="header-icon" title="Agregar rutina">
+              <ListPlus size={20} className="text-primary" />
+            </a>
+          </div>
         </div>
         
         <div className="page-subtitle">
@@ -57,6 +73,10 @@ export default async function DashboardPage({
               {completedCount} de {totalCount} cumplidas hoy
             </p>
           )}
+          {/* Debug: Mostrar fecha actual */}
+          <p className="subtitle-hint" style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.25rem' }}>
+            Fecha: {today}
+          </p>
         </div>
 
         {statusMessage && (
