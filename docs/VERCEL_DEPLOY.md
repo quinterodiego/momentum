@@ -54,18 +54,54 @@ Vercel debería detectar automáticamente:
 - **Output Directory**: `.next`
 - **Install Command**: `npm install`
 
-### 4. Deploy
+### 4. Deploy Inicial
 
 1. Haz clic en **"Deploy"**
 2. Espera a que termine el build
-3. Una vez completado, actualiza **NEXTAUTH_URL** con la URL real de Vercel
-4. Haz un nuevo deploy para aplicar el cambio
+3. **Copia la URL de tu app** (ej: `https://momentum-abc123.vercel.app`)
 
-### 5. Configurar Dominio (Opcional)
+### 5. ⚠️ IMPORTANTE: Configurar Google Cloud Console
 
-1. Ve a **Settings** > **Domains**
+**Este paso es CRÍTICO para que el login con Google funcione en producción.**
+
+1. Ve a [Google Cloud Console](https://console.cloud.google.com/)
+2. Selecciona tu proyecto
+3. Ve a **"APIs y servicios"** > **"Credenciales"**
+4. Haz clic en tu **ID de cliente de OAuth** (el que creaste para desarrollo)
+5. En la sección **"Orígenes autorizados de JavaScript"**, agrega:
+   ```
+   https://tu-dominio.vercel.app
+   ```
+   (Reemplaza `tu-dominio.vercel.app` con la URL real de Vercel)
+
+6. En la sección **"URI de redirección autorizados"**, agrega:
+   ```
+   https://tu-dominio.vercel.app/api/auth/callback/google
+   ```
+   (Mantén también `http://localhost:3000/api/auth/callback/google` para desarrollo local)
+
+7. Haz clic en **"Guardar"**
+
+### 6. Actualizar Variables de Entorno
+
+1. En Vercel, ve a **Settings** > **Environment Variables**
+2. Actualiza **NEXTAUTH_URL** con la URL real de Vercel:
+   ```
+   NEXTAUTH_URL=https://tu-dominio.vercel.app
+   ```
+3. Haz un nuevo deploy para aplicar los cambios
+
+### 7. Configurar Dominio Personalizado (Opcional)
+
+Si agregas un dominio personalizado:
+
+1. En Vercel, ve a **Settings** > **Domains**
 2. Agrega tu dominio personalizado
 3. Sigue las instrucciones de DNS
+4. **IMPORTANTE**: Una vez configurado, agrega también este dominio en Google Cloud Console:
+   - **Orígenes autorizados**: `https://tu-dominio.com`
+   - **URI de redirección**: `https://tu-dominio.com/api/auth/callback/google`
+5. Actualiza **NEXTAUTH_URL** en Vercel con el nuevo dominio
 
 ## Verificación Post-Deploy
 
@@ -85,9 +121,14 @@ Vercel debería detectar automáticamente:
 - Genera un nuevo secreto: `openssl rand -base64 32`
 - Agrégalo a las variables de entorno
 
-### Error: "Invalid redirect URI"
-- En Google Cloud Console, agrega la URL de Vercel a los redirect URIs autorizados
+### Error: "Invalid redirect URI" o "redirect_uri_mismatch"
+- **Solución**: Ve a Google Cloud Console > Credenciales > Tu OAuth Client
+- Agrega la URL exacta de Vercel en "URI de redirección autorizados
 - Formato: `https://tu-dominio.vercel.app/api/auth/callback/google`
+- **IMPORTANTE**: 
+  - Debe ser exactamente igual (con `https://`, sin barra final `/`)
+  - Debes hacer clic en "Guardar" después de agregar
+  - Puede tardar unos minutos en aplicarse
 
 ### Build falla
 - Verifica que todas las dependencias estén en `package.json`
