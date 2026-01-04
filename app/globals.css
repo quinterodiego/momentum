@@ -2256,12 +2256,23 @@ html {
   border: 2px solid rgba(6, 95, 70, 0.15);
   border-radius: 20px;
   padding: 1.5rem;
-  color: var(--text-primary); /* Verde oscuro */
+  color: var(--text-primary) !important; /* Verde oscuro - forzar color */
   font-size: 2.5rem;
   font-weight: 700;
   outline: none;
   text-align: center;
   transition: all 0.2s ease-out;
+  -webkit-text-fill-color: var(--text-primary); /* Para Safari/iOS */
+}
+
+.modal-input::-webkit-inner-spin-button,
+.modal-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.modal-input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
 }
 
 /* Desktop: input más grande */
@@ -2301,6 +2312,13 @@ html {
     0 0 0 4px rgba(46, 204, 113, 0.1),
     0 4px 12px rgba(30, 127, 92, 0.1);
   transform: translateY(-1px);
+  color: var(--text-primary) !important;
+  -webkit-text-fill-color: var(--text-primary); /* Para Safari/iOS */
+}
+
+.modal-input::selection {
+  background-color: rgba(46, 204, 113, 0.2);
+  color: var(--text-primary);
 }
 
 .modal-quick-values {
