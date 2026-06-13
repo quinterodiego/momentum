@@ -6,6 +6,15 @@
 import { google } from 'googleapis';
 import type { Routine, DailyLog, Stats } from './types';
 
+function parseScheduledDays(value: string | undefined): number[] {
+  if (!value || value.trim() === '') return [];
+  return value.split(',').map(Number).filter(n => !isNaN(n) && n >= 0 && n <= 6);
+}
+
+function serializeScheduledDays(days: number[]): string {
+  return days.join(',');
+}
+
 // Inicializar cliente de Google Sheets
 export function getSheetsClient() {
   const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
@@ -54,7 +63,7 @@ export async function getUserRoutines(userId: string): Promise<Routine[]> {
   try {
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'routines!A2:G',
+      range: 'routines!A2:H',
     });
 
     const rows = response.data.values || [];
@@ -70,6 +79,7 @@ export async function getUserRoutines(userId: string): Promise<Routine[]> {
           minValue: parseFloat(row[4]) || 0,
           unit: row[5] || '',
           active: row[6] === 'TRUE',
+          scheduledDays: parseScheduledDays(row[7]),
         });
       }
     }
@@ -89,7 +99,8 @@ export async function createRoutine(
   title: string,
   type: 'time' | 'quantity',
   minValue: number,
-  unit: string
+  unit: string,
+  scheduledDays: number[] = []
 ): Promise<Routine> {
   const { sheets, spreadsheetId } = getSheetsClient();
   const routineId = `routine_${Date.now()}`;
@@ -97,10 +108,10 @@ export async function createRoutine(
   try {
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'routines!A:G',
+      range: 'routines!A:H',
       valueInputOption: 'RAW',
       requestBody: {
-        values: [[routineId, userId, title, type, minValue, unit, 'TRUE']],
+        values: [[routineId, userId, title, type, minValue, unit, 'TRUE', serializeScheduledDays(scheduledDays)]],
       },
     });
 
@@ -112,6 +123,7 @@ export async function createRoutine(
       minValue,
       unit,
       active: true,
+      scheduledDays,
     };
   } catch (error) {
     console.error('Error creando rutina:', error);
@@ -356,14 +368,14 @@ export async function deleteDailyLog(logId: string): Promise<void> {
  */
 export async function updateRoutine(
   routineId: string,
-  updates: { title?: string; minValue?: number; unit?: string }
+  updates: { title?: string; minValue?: number; unit?: string; scheduledDays?: number[] }
 ): Promise<Routine> {
   const { sheets, spreadsheetId } = getSheetsClient();
 
   try {
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'routines!A2:G',
+      range: 'routines!A2:H',
     });
 
     const rows = response.data.values || [];
@@ -377,6 +389,7 @@ export async function updateRoutine(
     const updatedTitle = updates.title ?? routine[2];
     const updatedMinValue = updates.minValue ?? parseFloat(routine[4]);
     const updatedUnit = updates.unit ?? routine[5];
+    const updatedScheduledDays = updates.scheduledDays ?? parseScheduledDays(routine[7]);
 
     const actualRowIndex = rowIndex + 2;
     await sheets.spreadsheets.values.update({
@@ -388,6 +401,15 @@ export async function updateRoutine(
       },
     });
 
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `routines!H${actualRowIndex}`,
+      valueInputOption: 'RAW',
+      requestBody: {
+        values: [[serializeScheduledDays(updatedScheduledDays)]],
+      },
+    });
+
     return {
       id: routine[0],
       userId: routine[1],
@@ -396,6 +418,7 @@ export async function updateRoutine(
       minValue: updatedMinValue,
       unit: updatedUnit,
       active: routine[6] === 'TRUE',
+      scheduledDays: updatedScheduledDays,
     };
   } catch (error) {
     console.error('Error actualizando rutina:', error);

@@ -2554,3 +2554,386 @@ html {
   color: var(--text-secondary);
   opacity: 0.8;
 }
+
+/* ============================
+   DAY SELECTOR
+   ============================ */
+
+.day-selector {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: nowrap;
+}
+
+.day-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-tertiary);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.day-btn:hover:not(:disabled):not(.day-btn-readonly) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.day-btn-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.day-btn-active:hover:not(:disabled):not(.day-btn-readonly) {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+.day-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.day-btn-readonly {
+  cursor: default;
+  pointer-events: none;
+}
+
+.day-btn-readonly.day-btn-active {
+  opacity: 0.85;
+}
+
+/* ============================
+   MONDAY BANNER
+   ============================ */
+
+.monday-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--color-active);
+  border: 1px solid var(--color-primary);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.monday-banner-text {
+  font-size: 0.9rem;
+  color: var(--color-secondary);
+  font-weight: 500;
+}
+
+.monday-banner-link {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.monday-banner-link:hover {
+  color: var(--color-secondary);
+}
+
+/* ============================
+   DARK THEME
+   Se activa con data-theme="dark" en el elemento <html>
+   ============================ */
+
+/* Variables */
+[data-theme="dark"] {
+  --color-bg: #0F1117;
+  --color-card: #1A1D2E;
+  --color-card-hover: #20243A;
+  --color-active: #182A24;
+  --color-primary: #2ECC71;
+  --color-secondary: #34D872;
+  --text-primary: #E8ECEF;
+  --text-secondary: #9BA3AF;
+  --text-tertiary: #6B7280;
+  --accent-yellow: #F6E27F;
+  --accent-blue: #7DD3FC;
+  --green-bg: var(--color-bg);
+  --green-card: var(--color-card);
+  --green-card-hover: var(--color-card-hover);
+  --green-active: var(--color-active);
+}
+
+/* === Superficies === */
+
+[data-theme="dark"] .card {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.4);
+  border-color: rgba(255,255,255,0.07);
+}
+
+[data-theme="dark"] .routine-card {
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .routine-card:hover {
+  border-color: rgba(46,204,113,0.3);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+[data-theme="dark"] .routine-card.routine-completed {
+  background: rgba(46,204,113,0.07);
+  border-color: rgba(46,204,113,0.25);
+}
+
+[data-theme="dark"] .stats-grid,
+[data-theme="dark"] .history-stats {
+  border-color: rgba(255,255,255,0.07);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+}
+
+[data-theme="dark"] .streak-item,
+[data-theme="dark"] .day-item {
+  border-color: rgba(255,255,255,0.07);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+
+[data-theme="dark"] .streak-item:hover,
+[data-theme="dark"] .day-item:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+  border-color: rgba(255,255,255,0.12);
+}
+
+/* === Landing === */
+
+[data-theme="dark"] .features-section,
+[data-theme="dark"] .cta-section {
+  background: var(--color-bg);
+}
+
+[data-theme="dark"] .feature-card {
+  border-color: rgba(255,255,255,0.07);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+
+[data-theme="dark"] .feature-card:hover {
+  border-color: rgba(46,204,113,0.2);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+[data-theme="dark"] .philosophy-item {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+
+[data-theme="dark"] .philosophy-item:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+[data-theme="dark"] .cta-card {
+  border-color: rgba(255,255,255,0.07);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+/* === Inputs === */
+
+[data-theme="dark"] .onboarding-input {
+  border-color: rgba(255,255,255,0.1);
+  background: var(--color-card);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .onboarding-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(46,204,113,0.15), 0 2px 8px rgba(0,0,0,0.2);
+}
+
+[data-theme="dark"] .onboarding-input:disabled {
+  background: var(--color-card-hover);
+}
+
+[data-theme="dark"] .onboarding-type-btn {
+  background: var(--color-card);
+  border-color: rgba(255,255,255,0.1);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .onboarding-type-btn:hover {
+  background: var(--color-card-hover);
+  border-color: rgba(255,255,255,0.15);
+}
+
+/* === Botones === */
+
+[data-theme="dark"] .btn-secondary {
+  border-color: rgba(255,255,255,0.12);
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.18);
+}
+
+/* === Header icons === */
+
+[data-theme="dark"] .header-icon {
+  background: var(--color-card);
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .header-icon:hover {
+  background: var(--color-card-hover);
+  border-color: rgba(46,204,113,0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* === Modal === */
+
+[data-theme="dark"] .modal-overlay {
+  background: rgba(0,0,0,0.75);
+}
+
+[data-theme="dark"] .modal-content {
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 25px 80px rgba(0,0,0,0.7), 0 8px 20px rgba(0,0,0,0.5);
+}
+
+[data-theme="dark"] .modal-header {
+  border-bottom-color: rgba(255,255,255,0.08);
+}
+
+[data-theme="dark"] .modal-close:hover {
+  background: var(--color-card-hover);
+}
+
+[data-theme="dark"] .routine-detail-item {
+  border-color: rgba(255,255,255,0.06);
+}
+
+[data-theme="dark"] .routine-detail-status {
+  border-color: rgba(46,204,113,0.2);
+}
+
+[data-theme="dark"] .modal-input {
+  background: var(--color-card-hover);
+  border-color: rgba(255,255,255,0.1);
+  color: var(--text-primary) !important;
+  -webkit-text-fill-color: var(--text-primary);
+}
+
+[data-theme="dark"] .modal-input:focus {
+  background: var(--color-card);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(46,204,113,0.12), 0 4px 12px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .modal-quick-btn {
+  border-color: rgba(255,255,255,0.08);
+}
+
+[data-theme="dark"] .modal-quick-btn:hover {
+  background: var(--color-card);
+  border-color: rgba(255,255,255,0.14);
+}
+
+/* === Dividers y separadores === */
+
+[data-theme="dark"] .page-header {
+  border-bottom-color: rgba(255,255,255,0.07);
+}
+
+[data-theme="dark"] .settings-header {
+  border-bottom-color: rgba(255,255,255,0.07);
+}
+
+[data-theme="dark"] .onboarding-logout {
+  border-top-color: rgba(255,255,255,0.07);
+}
+
+[data-theme="dark"] .login-divider-line {
+  background-color: rgba(255,255,255,0.08);
+}
+
+[data-theme="dark"] .day-header {
+  border-bottom-color: rgba(255,255,255,0.07);
+}
+
+[data-theme="dark"] .landing-footer {
+  border-top-color: rgba(255,255,255,0.07);
+}
+
+/* === Errors === */
+
+[data-theme="dark"] .login-error {
+  background-color: rgba(204,51,51,0.12);
+  border-color: rgba(204,51,51,0.25);
+  color: #ff8080;
+}
+
+/* === Settings === */
+
+[data-theme="dark"] .settings-form-section {
+  background: rgba(46,204,113,0.04) !important;
+  border-color: rgba(255,255,255,0.07) !important;
+}
+
+/* === History === */
+
+[data-theme="dark"] .day-count {
+  background: rgba(46,204,113,0.1);
+}
+
+[data-theme="dark"] .day-routine-item {
+  background: rgba(255,255,255,0.03);
+}
+
+/* === Undo toast === */
+
+[data-theme="dark"] .undo-toast-content {
+  background: rgba(246,226,127,0.1);
+  border-color: rgba(246,226,127,0.25);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+}
+
+/* === Monday banner === */
+
+[data-theme="dark"] .monday-banner {
+  background: rgba(46,204,113,0.07);
+  border-color: rgba(46,204,113,0.22);
+}
+
+[data-theme="dark"] .monday-banner-text {
+  color: var(--color-primary);
+}
+
+/* === Day selector === */
+
+[data-theme="dark"] .day-btn {
+  border-color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.75);
+}
+
+[data-theme="dark"] .day-btn:hover:not(:disabled):not(.day-btn-readonly) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* === Status message === */
+
+[data-theme="dark"] .status-message {
+  background: var(--color-active);
+  border-color: rgba(46,204,113,0.2);
+}
+
+/* === Selection === */
+
+[data-theme="dark"] ::selection {
+  background: rgba(46,204,113,0.3);
+  color: var(--text-primary);
+}

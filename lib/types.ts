@@ -13,6 +13,7 @@ export interface Routine {
   minValue: number; // minutos para time, cantidad para quantity
   unit: string; // "min", "carilla", "litro", etc.
   active: boolean;
+  scheduledDays: number[]; // 0=Dom, 1=Lun, 2=Mar, 3=Mié, 4=Jue, 5=Vie, 6=Sáb. Vacío = todos los días
 }
 
 export interface DailyLog {

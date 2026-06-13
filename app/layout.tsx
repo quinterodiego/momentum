@@ -33,6 +33,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={`${plusJakartaSans.variable} ${plusJakartaSans.className}`}>
+      <head>
+        {/* Anti-FOUC: aplica el tema guardado antes de que React hidrate */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body>
         <Providers>{children}</Providers>
         <ServiceWorkerRegistration />

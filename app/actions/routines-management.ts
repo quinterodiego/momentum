@@ -15,10 +15,11 @@ export async function createUserRoutine(
   title: string,
   type: 'time' | 'quantity',
   minValue: number,
-  unit: string
+  unit: string,
+  scheduledDays: number[] = []
 ) {
   try {
-    await createRoutine(userId, title, type, minValue, unit);
+    await createRoutine(userId, title, type, minValue, unit, scheduledDays);
     // No redirigir, mantener en settings
   } catch (error) {
     console.error('Error creando rutina:', error);
@@ -31,7 +32,7 @@ export async function createUserRoutine(
  */
 export async function updateUserRoutine(
   routineId: string,
-  updates: { title?: string; minValue?: number; unit?: string }
+  updates: { title?: string; minValue?: number; unit?: string; scheduledDays?: number[] }
 ) {
   try {
     await updateRoutine(routineId, updates);

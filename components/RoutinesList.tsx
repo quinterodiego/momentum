@@ -5,6 +5,7 @@ import { Timer, Hash, Pencil, Ban } from 'lucide-react';
 import { updateUserRoutine, deactivateUserRoutine } from '@/app/actions/routines-management';
 import { useRouter } from 'next/navigation';
 import type { Routine } from '@/lib/types';
+import DaySelector from './DaySelector';
 
 interface RoutinesListProps {
   routines: Routine[];
@@ -17,6 +18,7 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
   const [editTitle, setEditTitle] = useState('');
   const [editMinValue, setEditMinValue] = useState('');
   const [editUnit, setEditUnit] = useState('');
+  const [editScheduledDays, setEditScheduledDays] = useState<number[]>([]);
 
   const activeRoutines = routines.filter(r => r.active);
   const inactiveRoutines = routines.filter(r => !r.active);
@@ -26,6 +28,12 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
     setEditTitle(routine.title);
     setEditMinValue(routine.minValue.toString());
     setEditUnit(routine.unit);
+    // Si scheduledDays está vacío, mostrar todos seleccionados para edición
+    setEditScheduledDays(
+      routine.scheduledDays && routine.scheduledDays.length > 0
+        ? routine.scheduledDays
+        : [1, 2, 3, 4, 5, 6, 0]
+    );
   };
 
   const handleSave = async (routineId: string) => {
@@ -34,6 +42,7 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
         title: editTitle,
         minValue: parseFloat(editMinValue) || 1,
         unit: editUnit,
+        scheduledDays: editScheduledDays.length === 7 ? [] : editScheduledDays,
       });
       setEditingId(null);
       router.refresh();
@@ -99,6 +108,13 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
                   />
                 )}
               </div>
+              <div style={{ marginBottom: '0.75rem' }}>
+                <p className="form-label" style={{ marginBottom: '0.4rem' }}>Días de la semana</p>
+                <DaySelector
+                  selectedDays={editScheduledDays}
+                  onChange={setEditScheduledDays}
+                />
+              </div>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <button
                   onClick={() => handleSave(routine.id)}
@@ -124,6 +140,13 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
                   {routine.type === 'time' ? <Timer size={16} /> : <Hash size={16} />}
                   Mínimo: {routine.minValue} {routine.unit}
                 </p>
+                <div style={{ marginTop: '0.5rem' }}>
+                  <DaySelector
+                    selectedDays={routine.scheduledDays ?? []}
+                    onChange={() => {}}
+                    readOnly
+                  />
+                </div>
               </div>
               <div className="routine-item-actions">
                 <button

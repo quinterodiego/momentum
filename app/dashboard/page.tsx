@@ -6,12 +6,13 @@
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import { ListPlus, History } from 'lucide-react';
-import { getRoutinesWithStatus, getTodayDate } from '@/lib/routines';
+import { getRoutinesWithStatus, getTodayDate, getTodayDayOfWeek } from '@/lib/routines';
 import { getStats } from '@/lib/sheets-routines';
 import { getCurrentUser } from '@/lib/auth';
 import RoutineCard from '@/components/RoutineCard';
 import StatsDisplay from '@/components/StatsDisplay';
 import LogoutButton from '@/components/LogoutButton';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default async function DashboardPage({
   searchParams,
@@ -26,7 +27,9 @@ export default async function DashboardPage({
 
   const userId = user.id;
   const today = getTodayDate();
-  
+  const todayDayOfWeek = getTodayDayOfWeek();
+  const isMonday = todayDayOfWeek === 1;
+
   // Debug: Log la fecha de hoy para verificar
   console.log('Fecha de hoy calculada:', today);
   
@@ -69,6 +72,7 @@ export default async function DashboardPage({
             </span>
           </h1>
           <div className="header-actions">
+            <ThemeToggle />
             <a href="/history" className="header-icon" title="Ver historial">
               <History size={20} className="text-primary" />
             </a>
@@ -90,6 +94,13 @@ export default async function DashboardPage({
             Fecha: {today}
           </p>
         </div>
+
+        {isMonday && (
+          <div className="monday-banner">
+            <span className="monday-banner-text">Es lunes — planificá los días de cada rutina</span>
+            <a href="/settings" className="monday-banner-link">Editar →</a>
+          </div>
+        )}
 
         {statusMessage && (
           <div className="status-message mb-4">

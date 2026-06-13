@@ -7,39 +7,63 @@ import { getUserRoutines, getTodayLogs, createDailyLog, updateStreak } from './s
 import type { Routine, DailyLog, RoutineWithStatus } from './types';
 
 /**
+ * Obtener el día de la semana actual en zona horaria Argentina
+ * Retorna: 0=Domingo, 1=Lunes, 2=Martes, 3=Miércoles, 4=Jueves, 5=Viernes, 6=Sábado
+ */
+export function getTodayDayOfWeek(): number {
+  const timezone = 'America/Argentina/Buenos_Aires';
+  const dateStr = new Intl.DateTimeFormat('en-CA', {
+    timeZone: timezone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date());
+  const [year, month, day] = dateStr.split('-').map(Number);
+  // Usar mediodía local para evitar desfases de zona horaria al parsear
+  return new Date(year, month - 1, day, 12, 0, 0).getDay();
+}
+
+/**
  * Obtener rutinas del usuario con su estado de hoy
  */
 export async function getRoutinesWithStatus(userId: string): Promise<RoutineWithStatus[]> {
   const routines = await getUserRoutines(userId);
   const today = getTodayDate();
+  const todayDayOfWeek = getTodayDayOfWeek();
   const todayLogs = await getTodayLogs(userId);
-  
+
   // Debug: Log para verificar
-  console.log('getRoutinesWithStatus - Fecha de hoy:', today);
+  console.log('getRoutinesWithStatus - Fecha de hoy:', today, '- Día de semana:', todayDayOfWeek);
   console.log('getRoutinesWithStatus - Logs de hoy encontrados:', todayLogs.length);
   console.log('getRoutinesWithStatus - Fechas de logs:', todayLogs.map(l => l.date));
-  
-  return routines.map((routine) => {
-    // Buscar log de hoy para esta rutina
-    // IMPORTANTE: Solo considerar logs con fecha exacta de hoy
-    const todayLog = todayLogs.find(
-      (log) => log.routineId === routine.id && log.date === today && log.completed === true
-    );
-    
-    // Debug: Log para cada rutina
-    if (todayLog) {
-      console.log(`Rutina "${routine.title}": completada hoy (${todayLog.date})`);
-    } else {
-      console.log(`Rutina "${routine.title}": pendiente (no hay log de hoy)`);
-    }
-    
-    return {
-      ...routine,
-      // Solo marcar como completada si hay un log de HOY con completed=true
-      completed: todayLog?.completed === true || false,
-      todayLog: todayLog || null,
-    };
-  });
+
+  return routines
+    .filter((routine) => {
+      // Si no tiene días programados (vacío), mostrar todos los días
+      if (!routine.scheduledDays || routine.scheduledDays.length === 0) return true;
+      return routine.scheduledDays.includes(todayDayOfWeek);
+    })
+    .map((routine) => {
+      // Buscar log de hoy para esta rutina
+      // IMPORTANTE: Solo considerar logs con fecha exacta de hoy
+      const todayLog = todayLogs.find(
+        (log) => log.routineId === routine.id && log.date === today && log.completed === true
+      );
+
+      // Debug: Log para cada rutina
+      if (todayLog) {
+        console.log(`Rutina "${routine.title}": completada hoy (${todayLog.date})`);
+      } else {
+        console.log(`Rutina "${routine.title}": pendiente (no hay log de hoy)`);
+      }
+
+      return {
+        ...routine,
+        // Solo marcar como completada si hay un log de HOY con completed=true
+        completed: todayLog?.completed === true || false,
+        todayLog: todayLog || null,
+      };
+    });
 }
 
 /**

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Timer, Hash, Plus } from 'lucide-react';
 import { createUserRoutine } from '@/app/actions/routines-management';
 import { useRouter } from 'next/navigation';
+import DaySelector from './DaySelector';
 
 interface CreateRoutineFormProps {
   userId: string;
@@ -15,6 +16,7 @@ export default function CreateRoutineForm({ userId }: CreateRoutineFormProps) {
   const [type, setType] = useState<'time' | 'quantity'>('time');
   const [minValue, setMinValue] = useState('10');
   const [unit, setUnit] = useState('min');
+  const [scheduledDays, setScheduledDays] = useState<number[]>([1, 2, 3, 4, 5, 6, 0]);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,14 +34,16 @@ export default function CreateRoutineForm({ userId }: CreateRoutineFormProps) {
         title.trim(),
         type,
         parseFloat(minValue) || 1,
-        type === 'time' ? 'min' : unit
+        type === 'time' ? 'min' : unit,
+        scheduledDays.length === 7 ? [] : scheduledDays
       );
-      
+
       // Limpiar formulario
       setTitle('');
       setMinValue('10');
       setUnit('min');
       setType('time');
+      setScheduledDays([1, 2, 3, 4, 5, 6, 0]);
       
       // Refrescar para mostrar la nueva rutina
       router.refresh();
@@ -123,6 +127,15 @@ export default function CreateRoutineForm({ userId }: CreateRoutineFormProps) {
           />
         </div>
       )}
+
+      <div className="form-group">
+        <label className="form-label">Días de la semana</label>
+        <DaySelector
+          selectedDays={scheduledDays}
+          onChange={setScheduledDays}
+          disabled={isLoading}
+        />
+      </div>
 
       <button
         type="submit"

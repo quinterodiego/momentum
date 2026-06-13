@@ -8,6 +8,7 @@ import { getUserRoutines } from '@/lib/sheets-routines';
 import { getCurrentUser } from '@/lib/auth';
 import RoutinesList from '@/components/RoutinesList';
 import CreateRoutineForm from '@/components/CreateRoutineForm';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default async function SettingsPage() {
   const user = await getCurrentUser();
@@ -24,9 +25,12 @@ export default async function SettingsPage() {
       <div className="card">
         <div className="page-header">
           <h1 className="page-title">Tus rutinas</h1>
-          <a href="/dashboard" className="header-icon" title="Volver">
-            ←
-          </a>
+          <div className="header-actions">
+            <ThemeToggle />
+            <a href="/dashboard" className="header-icon" title="Volver">
+              ←
+            </a>
+          </div>
         </div>
 
         <div className="settings-layout">
