@@ -32,30 +32,15 @@ export async function getRoutinesWithStatus(userId: string): Promise<RoutineWith
   const todayDayOfWeek = getTodayDayOfWeek();
   const todayLogs = await getTodayLogs(userId);
 
-  // Debug: Log para verificar
-  console.log('getRoutinesWithStatus - Fecha de hoy:', today, '- Día de semana:', todayDayOfWeek);
-  console.log('getRoutinesWithStatus - Logs de hoy encontrados:', todayLogs.length);
-  console.log('getRoutinesWithStatus - Fechas de logs:', todayLogs.map(l => l.date));
-
   return routines
     .filter((routine) => {
-      // Si no tiene días programados (vacío), mostrar todos los días
       if (!routine.scheduledDays || routine.scheduledDays.length === 0) return true;
       return routine.scheduledDays.includes(todayDayOfWeek);
     })
     .map((routine) => {
-      // Buscar log de hoy para esta rutina
-      // IMPORTANTE: Solo considerar logs con fecha exacta de hoy
       const todayLog = todayLogs.find(
         (log) => log.routineId === routine.id && log.date === today && log.completed === true
       );
-
-      // Debug: Log para cada rutina
-      if (todayLog) {
-        console.log(`Rutina "${routine.title}": completada hoy (${todayLog.date})`);
-      } else {
-        console.log(`Rutina "${routine.title}": pendiente (no hay log de hoy)`);
-      }
 
       return {
         ...routine,

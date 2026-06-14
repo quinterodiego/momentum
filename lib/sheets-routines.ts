@@ -149,19 +149,9 @@ export async function getTodayLogs(userId: string): Promise<DailyLog[]> {
     const rows = response.data.values || [];
     const logs: DailyLog[] = [];
 
-    // Debug: Log para verificar la fecha y los logs encontrados
-    console.log('Buscando logs para fecha:', today);
-    console.log('Total de filas en daily_logs:', rows.length);
-
     for (const row of rows) {
-      // Solo procesar logs del usuario
       if (row[2] === userId) {
         const logDate = row[3];
-        // Debug: Log todas las fechas encontradas para este usuario
-        if (logDate) {
-          console.log(`Log encontrado - fecha: ${logDate}, hoy: ${today}, coincide: ${logDate === today}`);
-        }
-        
         if (logDate === today) {
           logs.push({
             id: row[0],
@@ -175,7 +165,6 @@ export async function getTodayLogs(userId: string): Promise<DailyLog[]> {
       }
     }
 
-    console.log(`Logs de hoy encontrados: ${logs.length}`);
     return logs;
   } catch (error) {
     console.error('Error obteniendo logs de hoy:', error);

@@ -30,18 +30,8 @@ export default async function DashboardPage({
   const todayDayOfWeek = getTodayDayOfWeek();
   const isMonday = todayDayOfWeek === 1;
 
-  // Debug: Log la fecha de hoy para verificar
-  console.log('Fecha de hoy calculada:', today);
-  
   const routines = await getRoutinesWithStatus(userId);
   const stats = await getStats(userId);
-  
-  // Debug: Log las rutinas y sus estados
-  console.log('Rutinas obtenidas:', routines.map(r => ({
-    title: r.title,
-    completed: r.completed,
-    todayLog: r.todayLog ? { date: r.todayLog.date, completed: r.todayLog.completed } : null
-  })));
 
   // Mensajes según el resultado
   let statusMessage = '';
@@ -89,10 +79,6 @@ export default async function DashboardPage({
               {completedCount} de {totalCount} cumplidas hoy
             </p>
           )}
-          {/* Debug: Mostrar fecha actual */}
-          <p className="subtitle-hint" style={{ fontSize: '0.75rem', opacity: 0.5, marginTop: '0.25rem' }}>
-            Fecha: {today}
-          </p>
         </div>
 
         {isMonday && (
