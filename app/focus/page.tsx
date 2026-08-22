@@ -37,12 +37,12 @@ export default async function FocusPage({
   return (
     <div className="container">
       <div className="card text-center">
-        <h1 className="text-3xl font-bold mb-6">Enfocándote</h1>
+        <h1 className="text-3xl font-bold mb-4">Enfocándote</h1>
 
-        <div className="mb-4 p-4 bg-white bg-opacity-10 rounded-lg">
-          <p className="opacity-80 mb-1">Rutina:</p>
-          <p className="text-lg font-bold">{routine.title}</p>
-          <p className="text-sm opacity-70 mt-1">
+        <div className="focus-routine-info">
+          <p className="focus-routine-label">Rutina</p>
+          <p className="focus-routine-title">{routine.title}</p>
+          <p className="focus-routine-minimum">
             Mínimo: {routine.minValue} {routine.unit}
           </p>
         </div>

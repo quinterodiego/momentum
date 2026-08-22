@@ -56,52 +56,59 @@ export default function CreateRoutineForm({ userId }: CreateRoutineFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="routine-form">
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Nombre de la rutina (ej: Leer, Ejercicio...)"
-        className="onboarding-input"
-        disabled={isLoading}
-        required
-      />
+      <div className="form-group">
+        <label className="form-question-label" htmlFor="routine-title">
+          ¿Qué querés hacer?
+        </label>
+        <input
+          id="routine-title"
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Ej: Leer, Ejercicio, Tomar agua..."
+          className="onboarding-input"
+          disabled={isLoading}
+          required
+        />
+      </div>
+
+      <div className="form-group">
+        <label className="form-question-label">¿Cómo la medís?</label>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button
+            type="button"
+            onClick={() => {
+              setType('time');
+              setUnit('min');
+            }}
+            className={`btn ${type === 'time' ? 'btn-primary' : 'btn-secondary'}`}
+            style={{ flex: 1, maxWidth: 'none', padding: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}
+          >
+            <Timer size={18} />
+            Tiempo
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setType('quantity');
+              setUnit('vez');
+            }}
+            className={`btn ${type === 'quantity' ? 'btn-primary' : 'btn-secondary'}`}
+            style={{ flex: 1, maxWidth: 'none', padding: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}
+          >
+            <Hash size={18} />
+            Cantidad
+          </button>
+        </div>
+      </div>
 
       <div className="form-row">
         <div className="form-group">
-          <label className="form-label">Tipo</label>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button
-              type="button"
-              onClick={() => {
-                setType('time');
-                setUnit('min');
-              }}
-              className={`btn ${type === 'time' ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ flex: 1, maxWidth: 'none', padding: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}
-            >
-              <Timer size={18} />
-              Tiempo
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setType('quantity');
-                setUnit('vez');
-              }}
-              className={`btn ${type === 'quantity' ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ flex: 1, maxWidth: 'none', padding: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}
-            >
-              <Hash size={18} />
-              Cantidad
-            </button>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">
-            Mínimo {type === 'time' ? '(minutos)' : '(cantidad)'}
+          <label className="form-question-label" htmlFor="routine-minvalue">
+            ¿Cuál es tu mínimo?
           </label>
           <input
+            id="routine-minvalue"
             type="number"
             value={minValue}
             onChange={(e) => setMinValue(e.target.value)}
@@ -110,26 +117,30 @@ export default function CreateRoutineForm({ userId }: CreateRoutineFormProps) {
             disabled={isLoading}
             required
           />
+          <span className="form-hint">{type === 'time' ? 'minutos' : unit || 'unidad'}</span>
         </div>
+
+        {type === 'quantity' && (
+          <div className="form-group">
+            <label className="form-question-label" htmlFor="routine-unit">
+              Unidad
+            </label>
+            <input
+              id="routine-unit"
+              type="text"
+              value={unit}
+              onChange={(e) => setUnit(e.target.value)}
+              placeholder="Ej: carilla, litro, vez..."
+              className="onboarding-input"
+              disabled={isLoading}
+              required
+            />
+          </div>
+        )}
       </div>
 
-      {type === 'quantity' && (
-        <div className="form-group">
-          <label className="form-label">Unidad</label>
-          <input
-            type="text"
-            value={unit}
-            onChange={(e) => setUnit(e.target.value)}
-            placeholder="Ej: carilla, litro, vez..."
-            className="onboarding-input"
-            disabled={isLoading}
-            required
-          />
-        </div>
-      )}
-
       <div className="form-group">
-        <label className="form-label">Días de la semana</label>
+        <label className="form-question-label">¿Qué días?</label>
         <DaySelector
           selectedDays={scheduledDays}
           onChange={setScheduledDays}

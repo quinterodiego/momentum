@@ -8,20 +8,18 @@ interface StatsDisplayProps {
 
 export default function StatsDisplay({ stats }: StatsDisplayProps) {
   return (
-    <div className="stats-grid">
-      <div className="stat-item">
-        <div className="stat-value">{stats.streak}</div>
-        <div className="stat-label">Días de racha</div>
+    <div className="streak-panel">
+      <div className="streak-panel-value">
+        {stats.streak} {stats.streak === 1 ? 'día' : 'días'}
       </div>
+      <div className="streak-panel-label">Racha actual</div>
       {stats.lastCompletedDate && (
-        <div className="stat-item">
-          <div className="stat-value">
-            {new Date(stats.lastCompletedDate).toLocaleDateString('es-AR', {
-              day: 'numeric',
-              month: 'short'
-            })}
-          </div>
-          <div className="stat-label">Último día</div>
+        <div className="streak-panel-last">
+          Último día:{' '}
+          {new Date(stats.lastCompletedDate).toLocaleDateString('es-AR', {
+            day: 'numeric',
+            month: 'short',
+          })}
         </div>
       )}
     </div>

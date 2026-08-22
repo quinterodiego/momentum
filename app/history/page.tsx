@@ -8,6 +8,7 @@ import { getCurrentUser } from '@/lib/auth';
 import { getAllLogs } from '@/lib/sheets-routines';
 import { getUserRoutines } from '@/lib/sheets-routines';
 import { getStats } from '@/lib/sheets-routines';
+import ThemeToggle from '@/components/ThemeToggle';
 import type { DailyLog, Routine } from '@/lib/types';
 
 interface LogWithRoutine extends DailyLog {
@@ -103,30 +104,34 @@ export default async function HistoryPage() {
     <div className="container">
       <div className="card">
         <div className="page-header">
-          <a href="/dashboard" className="header-icon" title="Volver al dashboard">
+          <a href="/dashboard" className="header-icon" title="Volver a Hoy">
             <ArrowLeft size={20} className="text-primary" />
           </a>
           <h1 className="page-title">Historial</h1>
-          <div style={{ width: '20px' }} /> {/* Spacer para centrar */}
+          <div className="header-actions">
+            <ThemeToggle />
+          </div>
         </div>
 
         <div className="page-subtitle">
           <p className="subtitle-text">Tus rachas y días cumplidos</p>
         </div>
 
-        {/* Estadísticas generales */}
+        {/* Estadísticas generales - la racha actual es la métrica protagonista */}
         <div className="history-stats">
-          <div className="history-stat-item">
-            <div className="history-stat-value">{stats.streak}</div>
-            <div className="history-stat-label">Racha actual</div>
+          <div className="history-hero-stat">
+            <div className="history-hero-value">{stats.streak}</div>
+            <div className="history-hero-label">{stats.streak === 1 ? 'día de racha actual' : 'días de racha actual'}</div>
           </div>
-          <div className="history-stat-item">
-            <div className="history-stat-value">{daySummaries.length}</div>
-            <div className="history-stat-label">Días cumplidos</div>
-          </div>
-          <div className="history-stat-item">
-            <div className="history-stat-value">{streaks.length > 0 ? streaks[0].days : 0}</div>
-            <div className="history-stat-label">Mejor racha</div>
+          <div className="history-secondary-stats">
+            <div className="history-stat-item">
+              <div className="history-stat-value">{daySummaries.length}</div>
+              <div className="history-stat-label">Días cumplidos</div>
+            </div>
+            <div className="history-stat-item">
+              <div className="history-stat-value">{streaks.length > 0 ? streaks[0].days : 0}</div>
+              <div className="history-stat-label">Mejor racha</div>
+            </div>
           </div>
         </div>
 
@@ -192,7 +197,7 @@ export default async function HistoryPage() {
                   <div className="day-routines">
                     {day.logs.map((log) => (
                       <div key={log.id} className="day-routine-item">
-                        <span className="day-routine-name">
+                        <span className={`day-routine-name${!log.routine ? ' day-routine-name-deleted' : ''}`}>
                           {log.routine?.title || 'Rutina eliminada'}
                         </span>
                         <span className="day-routine-value">

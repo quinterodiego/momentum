@@ -2,13 +2,28 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Timer, RefreshCw, Target, Flame, Check } from 'lucide-react';
+import { Check, Timer, Hash } from 'lucide-react';
 import SignInButton from '@/components/SignInButton';
 import LandingFooter from '@/components/LandingFooter';
 import LoginModal from '@/components/LoginModal';
 
+const EXAMPLES = [
+  { title: 'Leer', value: '2 páginas' },
+  { title: 'Tomar agua', value: '1 litro' },
+  { title: 'Estudiar', value: '30 minutos' },
+  { title: 'Hacer ejercicio', value: '20 minutos' },
+];
+
+const TODAY_DEMO = [
+  { title: 'Leer libro', value: '2 páginas', done: true },
+  { title: 'Tomar agua', value: '1 litro', done: false },
+  { title: 'Estudiar', value: '30 min', done: false },
+  { title: 'Hacer ejercicio', value: '20 min', done: false },
+];
+
 export default function LandingPageClient() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const completedDemo = TODAY_DEMO.filter((r) => r.done).length;
 
   return (
     <>
@@ -18,33 +33,45 @@ export default function LandingPageClient() {
           <div className="container">
             <div className="hero-wrapper">
               <div className="hero-image">
-                <Image
-                  src="/hero-banner.png"
-                  alt="Momentum - Rutinas diarias mínimas"
-                  width={1200}
-                  height={600}
-                  priority
-                  className="hero-banner-image"
-                />
+                <div className="preview-card" aria-hidden="true">
+                  <div className="preview-card-header">
+                    <span className="preview-card-label">HOY</span>
+                  </div>
+                  <div className="preview-routine-list">
+                    {TODAY_DEMO.map((r) => (
+                      <div
+                        key={r.title}
+                        className={`preview-routine ${r.done ? 'preview-routine-done' : ''}`}
+                      >
+                        <div className="preview-routine-info">
+                          <span className="preview-routine-name">{r.title}</span>
+                          <span className="preview-routine-value">{r.value}</span>
+                        </div>
+                        {r.done && <Check size={18} className="preview-routine-check" />}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="preview-progress">
+                    <span className="preview-progress-text">
+                      {completedDemo} de {TODAY_DEMO.length} cumplidas
+                    </span>
+                    <div className="preview-progress-track">
+                      <div
+                        className="preview-progress-fill"
+                        style={{ width: `${(completedDemo / TODAY_DEMO.length) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="hero-content">
-                <h1 className="hero-title">
-                  <span className="hero-title-content">
-                    <span>Momentum</span>
-                    <Image 
-                      src="/cubo.png" 
-                      alt="Cubo" 
-                      width={48} 
-                      height={48} 
-                      className="hero-title-icon"
-                    />
-                  </span>
-                </h1>
-                <p className="hero-subtitle">
-                  Rutinas diarias mínimas. Sin presión, sin culpa.
-                </p>
+                <div className="hero-brand">
+                  <Image src="/cubo.png" alt="" width={28} height={28} className="hero-brand-icon" />
+                  <span>Momentum</span>
+                </div>
+                <h1 className="hero-title">Hacé un poco.<br />Todos los días.</h1>
                 <p className="hero-description">
-                  Cumplir el mínimo diario es éxito. No existe "fallar", solo "no registrar hoy".
+                  Creá mínimos simples para las cosas que querés mantener en movimiento.
                 </p>
                 <div className="hero-cta">
                   <SignInButton onEmailClick={() => setIsLoginModalOpen(true)} />
@@ -57,92 +84,148 @@ export default function LandingPageClient() {
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Vos decidís cuánto alcanza */}
         <section className="features-section">
           <div className="container">
-            <h2 className="section-title">Cómo funciona</h2>
-            <div className="features-grid">
-              <div className="feature-card">
-                <div className="feature-icon">
-                  <RefreshCw size={32} />
+            <h2 className="section-title">Vos decidís cuánto alcanza.</h2>
+            <div className="example-grid">
+              {EXAMPLES.map((ex) => (
+                <div key={ex.title} className="example-card">
+                  <p className="example-card-title">{ex.title}</p>
+                  <p className="example-card-value">{ex.value}</p>
                 </div>
-                <h3 className="feature-title">Rutinas diarias</h3>
-                <p className="feature-description">
-                  Creá rutinas mínimas que se repiten cada día. Por tiempo o por cantidad.
-                </p>
-              </div>
+              ))}
+            </div>
+            <div className="example-type-row">
+              <span className="example-type-badge">
+                <Timer size={16} />
+                Tiempo
+              </span>
+              <span className="example-type-badge">
+                <Hash size={16} />
+                Cantidad
+              </span>
+            </div>
+          </div>
+        </section>
 
-              <div className="feature-card">
-                <div className="feature-icon">
-                  <Target size={32} />
-                </div>
-                <h3 className="feature-title">Mínimos, no máximos</h3>
-                <p className="feature-description">
-                  El objetivo es cumplir el mínimo diario. No hay perfección, solo constancia.
-                </p>
-              </div>
-
-              <div className="feature-card">
-                <div className="feature-icon">
-                  <Timer size={32} />
-                </div>
-                <h3 className="feature-title">Flexible</h3>
-                <p className="feature-description">
-                  Rutinas por tiempo (10 min) o por cantidad (1 litro). Vos elegís.
-                </p>
-              </div>
-
-              <div className="feature-card">
-                <div className="feature-icon">
-                  <Flame size={32} />
-                </div>
-                <h3 className="feature-title">Rachas diarias</h3>
-                <p className="feature-description">
-                  Cada día que cumplís suma a tu racha. Sin presión, sin culpa.
-                </p>
+        {/* A tu ritmo */}
+        <section className="philosophy-section">
+          <div className="container">
+            <h2 className="section-title">No tiene que ser todos los días.</h2>
+            <p className="cta-description" style={{ maxWidth: '520px', margin: '0 auto' }}>
+              Elegí cuándo querés sostener cada rutina.
+            </p>
+            <div className="landing-rhythm-demo" aria-hidden="true">
+              <div className="day-selector">
+                {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((label, i) => (
+                  <span
+                    key={label}
+                    className={`day-btn day-btn-readonly ${i < 3 ? 'day-btn-active' : ''}`}
+                  >
+                    {label}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
-        {/* Philosophy Section */}
+        {/* Hoy - la interfaz real como protagonista */}
+        <section className="cta-section">
+          <div className="container">
+            <h2 className="section-title">Hoy con lo mínimo alcanza.</h2>
+            <div className="landing-demo-progress" aria-hidden="true">
+              <p className="today-progress-hint">
+                {completedDemo} de {TODAY_DEMO.length} cumplidas
+              </p>
+              <div className="today-progress-track">
+                <div
+                  className="today-progress-fill"
+                  style={{ width: `${(completedDemo / TODAY_DEMO.length) * 100}%` }}
+                />
+              </div>
+            </div>
+            <div className="landing-demo-wrap" aria-hidden="true">
+              <div className="routines-list">
+                {TODAY_DEMO.map((r) => (
+                  <div key={r.title} className={`routine-card ${r.done ? 'routine-completed' : ''}`}>
+                    <div className="routine-header">
+                      <h3 className="routine-title">{r.title}</h3>
+                      {r.done && (
+                        <span className="routine-check">
+                          <Check size={22} />
+                        </span>
+                      )}
+                    </div>
+                    <div className="routine-value-block">
+                      <span className="routine-value-number">{r.value}</span>
+                      <span className="routine-value-label">
+                        {r.done ? 'Cumplido hoy' : 'Mínimo de hoy'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Constancia */}
         <section className="philosophy-section">
           <div className="container">
-            <h2 className="section-title">Nuestra filosofía</h2>
-            <div className="philosophy-content">
-              <div className="philosophy-item">
-                <div className="philosophy-icon">
-                  <Check size={24} />
+            <h2 className="section-title">Lo importante es volver.</h2>
+            <div className="landing-history-demo" aria-hidden="true">
+              <div className="history-stats">
+                <div className="history-hero-stat">
+                  <div className="history-hero-value">7</div>
+                  <div className="history-hero-label">días de racha actual</div>
                 </div>
-                <div className="philosophy-item-content">
-                  <h3 className="philosophy-title">No existe "fallar"</h3>
-                  <p className="philosophy-text">
-                    Solo existe "no registrar hoy". Cada día empieza limpio. No hay atrasos, no hay días fallidos.
-                  </p>
-                </div>
-              </div>
-              <div className="philosophy-item">
-                <div className="philosophy-icon">
-                  <Check size={24} />
-                </div>
-                <div className="philosophy-item-content">
-                  <h3 className="philosophy-title">El mínimo alcanza</h3>
-                  <p className="philosophy-text">
-                    No necesitás hacer más. Cumplir el mínimo diario es éxito. La perfección no existe.
-                  </p>
+                <div className="history-secondary-stats">
+                  <div className="history-stat-item">
+                    <div className="history-stat-value">24</div>
+                    <div className="history-stat-label">Días cumplidos</div>
+                  </div>
+                  <div className="history-stat-item">
+                    <div className="history-stat-value">12</div>
+                    <div className="history-stat-label">Mejor racha</div>
+                  </div>
                 </div>
               </div>
-              <div className="philosophy-item">
-                <div className="philosophy-icon">
-                  <Check size={24} />
+              <div className="landing-streaks-demo">
+                <div className="streak-item">
+                  <div className="streak-days">12 días</div>
+                  <div className="streak-dates">3 jul - 14 jul</div>
                 </div>
-                <div className="philosophy-item-content">
-                  <h3 className="philosophy-title">Rutinas, no tareas</h3>
-                  <p className="philosophy-text">
-                    No hay pendientes acumulados. Solo rutinas que se repiten cada día. Simple y sostenible.
-                  </p>
+                <div className="streak-item" style={{ marginTop: '0.75rem' }}>
+                  <div className="streak-days">5 días</div>
+                  <div className="streak-dates">22 jun - 26 jun</div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Sin pendientes */}
+        <section className="features-section">
+          <div className="container">
+            <div className="statement-card">
+              <h2 className="statement-title">Mañana empezás de nuevo.</h2>
+              <p className="statement-text">
+                No se acumulan tareas pendientes. No hay una lista creciente de cosas atrasadas.
+                No se trata de recuperar ayer. Cada día vuelve a empezar.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Mensaje diferencial */}
+        <section className="philosophy-section">
+          <div className="container">
+            <div className="pull-quote">
+              <p className="pull-quote-text">
+                No organices todo lo que tenés que hacer. Elegí lo mínimo que querés sostener.
+              </p>
             </div>
           </div>
         </section>
@@ -151,9 +234,9 @@ export default function LandingPageClient() {
         <section className="cta-section">
           <div className="container">
             <div className="cta-card">
-              <h2 className="cta-title">¿Listo para empezar?</h2>
+              <h2 className="cta-title">Empezá por lo mínimo.</h2>
               <p className="cta-description">
-                No necesitás planificar nada. Solo empezá.
+                Hoy alcanza con empezar.
               </p>
               <div className="cta-buttons">
                 <SignInButton onEmailClick={() => setIsLoginModalOpen(true)} />
@@ -165,9 +248,9 @@ export default function LandingPageClient() {
         <LandingFooter />
       </div>
 
-      <LoginModal 
-        isOpen={isLoginModalOpen} 
-        onClose={() => setIsLoginModalOpen(false)} 
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
       />
     </>
   );

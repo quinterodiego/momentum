@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Check } from 'lucide-react';
+import { Check, ArrowRight, Play } from 'lucide-react';
 import type { RoutineWithStatus } from '@/lib/types';
 import UndoToast from './UndoToast';
 import ValueInputModal from './ValueInputModal';
@@ -111,30 +111,38 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
         ref={cardRef}
         className={`routine-card ${routine.completed ? 'routine-completed' : ''} ${justCompleted ? 'just-completed' : ''}`}
         onClick={handleClick}
+        role="button"
+        tabIndex={0}
+        aria-label={`${routine.title}, ${routine.completed ? 'cumplida hoy' : 'pendiente'}`}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
       >
         <div className="routine-header">
           <h3 className="routine-title">{routine.title}</h3>
           {routine.completed && (
             <span className="routine-check">
-              <Check size={24} />
+              <Check size={22} />
             </span>
           )}
         </div>
-        
-        <div className="routine-info">
-          <span className="routine-minimum">
-            Mínimo: {routine.minValue} {routine.unit}
+
+        <div className="routine-value-block">
+          <span className="routine-value-number">
+            {routine.completed && routine.todayLog ? routine.todayLog.value : routine.minValue}{' '}
+            {routine.unit}
           </span>
-          {routine.completed && routine.todayLog && (
-            <span className="routine-value">
-              Cumpliste: {routine.todayLog.value} {routine.unit}
-              {routine.todayLog.value > routine.minValue && (
-                <span className="routine-extra" title="Tocar para editar">
-                  {' '}(+{((routine.todayLog.value / routine.minValue - 1) * 100).toFixed(0)}%)
-                </span>
-              )}
-            </span>
-          )}
+          <span className="routine-value-label">
+            {routine.completed ? 'Cumplido hoy' : 'Mínimo de hoy'}
+            {routine.completed && routine.todayLog && routine.todayLog.value > routine.minValue && (
+              <span className="routine-extra" title="Tocar para editar">
+                {' '}(+{((routine.todayLog.value / routine.minValue - 1) * 100).toFixed(0)}%)
+              </span>
+            )}
+          </span>
         </div>
 
         {!routine.completed && (
@@ -142,9 +150,13 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
             {isLoading ? (
               <span className="routine-action-text">Procesando...</span>
             ) : routine.type === 'time' ? (
-              <span className="routine-action-text">Tocar para empezar timer</span>
+              <span className="routine-action-text">
+                <Play size={14} /> Empezar
+              </span>
             ) : (
-              <span className="routine-action-text">Tocar para marcar como cumplida</span>
+              <span className="routine-action-text">
+                Marcar como cumplida <ArrowRight size={14} />
+              </span>
             )}
           </div>
         )}

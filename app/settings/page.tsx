@@ -4,6 +4,7 @@
  */
 
 import { redirect } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 import { getUserRoutines } from '@/lib/sheets-routines';
 import { getCurrentUser } from '@/lib/auth';
 import RoutinesList from '@/components/RoutinesList';
@@ -27,8 +28,8 @@ export default async function SettingsPage() {
           <h1 className="page-title">Tus rutinas</h1>
           <div className="header-actions">
             <ThemeToggle />
-            <a href="/dashboard" className="header-icon" title="Volver">
-              ←
+            <a href="/dashboard" className="header-icon" title="Volver a Hoy">
+              <ArrowLeft size={20} />
             </a>
           </div>
         </div>

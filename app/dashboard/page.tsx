@@ -5,7 +5,7 @@
 
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
-import { ListPlus, History } from 'lucide-react';
+import { ListPlus, History, Check } from 'lucide-react';
 import { getRoutinesWithStatus, getTodayDate, getTodayDayOfWeek } from '@/lib/routines';
 import { getStats } from '@/lib/sheets-routines';
 import { getCurrentUser } from '@/lib/auth';
@@ -66,7 +66,7 @@ export default async function DashboardPage({
             <a href="/history" className="header-icon" title="Ver historial">
               <History size={20} className="text-primary" />
             </a>
-            <a href="/settings" className="header-icon" title="Agregar rutina">
+            <a href="/settings" className="header-icon" title="Gestionar rutinas">
               <ListPlus size={20} className="text-primary" />
             </a>
           </div>
@@ -75,9 +75,31 @@ export default async function DashboardPage({
         <div className="page-subtitle">
           <p className="subtitle-text">Hoy con lo mínimo alcanza</p>
           {totalCount > 0 && (
-            <p className="subtitle-hint">
-              {completedCount} de {totalCount} cumplidas hoy
-            </p>
+            <div className="today-progress">
+              <p className={`today-progress-hint ${completedCount === totalCount ? 'today-progress-done' : ''}`}>
+                {completedCount === totalCount ? (
+                  <>
+                    Por hoy alcanza
+                    <Check size={16} className="today-progress-check" />
+                  </>
+                ) : (
+                  `${completedCount} de ${totalCount} cumplidas`
+                )}
+              </p>
+              <div
+                className="today-progress-track"
+                role="progressbar"
+                aria-valuenow={completedCount}
+                aria-valuemin={0}
+                aria-valuemax={totalCount}
+                aria-label="Progreso de rutinas de hoy"
+              >
+                <div
+                  className="today-progress-fill"
+                  style={{ width: `${(completedCount / totalCount) * 100}%` }}
+                />
+              </div>
+            </div>
           )}
         </div>
 

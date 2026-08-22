@@ -20,28 +20,28 @@ export default function SignInButton({ onEmailClick }: SignInButtonProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', maxWidth: '300px' }}>
       <button
-        onClick={handleEmailSignIn}
+        onClick={handleGoogleSignIn}
         className="btn btn-primary hero-cta-button"
-        style={{ 
+        style={{
           padding: '1.125rem 2.5rem',
           width: '100%',
           fontSize: '1.0625rem',
           fontWeight: 600
         }}
       >
-        Iniciar sesión
+        Continuar con Google
       </button>
       <button
-        onClick={handleGoogleSignIn}
+        onClick={handleEmailSignIn}
         className="btn btn-secondary"
-        style={{ 
+        style={{
           padding: '1rem 2.5rem',
           width: '100%',
           fontSize: '1rem',
           fontWeight: 500
         }}
       >
-        Continuar con Google
+        Iniciar sesión con email
       </button>
     </div>
   );
