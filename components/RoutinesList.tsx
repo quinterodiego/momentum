@@ -77,7 +77,7 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
   };
 
   return (
-    <div className="routines-list">
+    <div className="routine-items-grid">
       {activeRoutines.map((routine) => (
         <div key={routine.id} className="routine-item" data-routine-id={routine.id}>
           {editingId === routine.id ? (
