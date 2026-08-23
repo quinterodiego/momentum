@@ -113,7 +113,7 @@ export default function LandingPageClient() {
         <section className="philosophy-section">
           <div className="container">
             <h2 className="section-title">No tiene que ser todos los días.</h2>
-            <p className="cta-description" style={{ maxWidth: '520px', margin: '0 auto' }}>
+            <p className="cta-description">
               Elegí cuándo querés sostener cada rutina.
             </p>
             <div className="landing-rhythm-demo" aria-hidden="true">
@@ -131,48 +131,8 @@ export default function LandingPageClient() {
           </div>
         </section>
 
-        {/* Hoy - la interfaz real como protagonista */}
-        <section className="cta-section">
-          <div className="container">
-            <h2 className="section-title">Hoy con lo mínimo alcanza.</h2>
-            <div className="landing-demo-progress" aria-hidden="true">
-              <p className="today-progress-hint">
-                {completedDemo} de {TODAY_DEMO.length} cumplidas
-              </p>
-              <div className="today-progress-track">
-                <div
-                  className="today-progress-fill"
-                  style={{ width: `${(completedDemo / TODAY_DEMO.length) * 100}%` }}
-                />
-              </div>
-            </div>
-            <div className="landing-demo-wrap" aria-hidden="true">
-              <div className="routines-list">
-                {TODAY_DEMO.map((r) => (
-                  <div key={r.title} className={`routine-card ${r.done ? 'routine-completed' : ''}`}>
-                    <div className="routine-header">
-                      <h3 className="routine-title">{r.title}</h3>
-                      {r.done && (
-                        <span className="routine-check">
-                          <Check size={22} />
-                        </span>
-                      )}
-                    </div>
-                    <div className="routine-value-block">
-                      <span className="routine-value-number">{r.value}</span>
-                      <span className="routine-value-label">
-                        {r.done ? 'Cumplido hoy' : 'Mínimo de hoy'}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Constancia */}
-        <section className="philosophy-section">
+        <section className="landing-constancy-section">
           <div className="container">
             <h2 className="section-title">Lo importante es volver.</h2>
             <div className="landing-history-demo" aria-hidden="true">
@@ -192,12 +152,13 @@ export default function LandingPageClient() {
                   </div>
                 </div>
               </div>
+              <p className="landing-streaks-label">Rachas anteriores</p>
               <div className="landing-streaks-demo">
                 <div className="streak-item">
                   <div className="streak-days">12 días</div>
                   <div className="streak-dates">3 jul - 14 jul</div>
                 </div>
-                <div className="streak-item" style={{ marginTop: '0.75rem' }}>
+                <div className="streak-item">
                   <div className="streak-days">5 días</div>
                   <div className="streak-dates">22 jun - 26 jun</div>
                 </div>
@@ -207,20 +168,19 @@ export default function LandingPageClient() {
         </section>
 
         {/* Sin pendientes */}
-        <section className="features-section">
+        <section className="landing-statement-section">
           <div className="container">
             <div className="statement-card">
               <h2 className="statement-title">Mañana empezás de nuevo.</h2>
               <p className="statement-text">
-                No se acumulan tareas pendientes. No hay una lista creciente de cosas atrasadas.
-                No se trata de recuperar ayer. Cada día vuelve a empezar.
+                Sin pendientes acumulados. Sin recuperar ayer. Cada día vuelve a empezar.
               </p>
             </div>
           </div>
         </section>
 
         {/* Mensaje diferencial */}
-        <section className="philosophy-section">
+        <section className="landing-quote-section">
           <div className="container">
             <div className="pull-quote">
               <p className="pull-quote-text">
@@ -233,7 +193,7 @@ export default function LandingPageClient() {
         {/* CTA Section */}
         <section className="cta-section">
           <div className="container">
-            <div className="cta-card">
+            <div className="cta-content">
               <h2 className="cta-title">Empezá por lo mínimo.</h2>
               <p className="cta-description">
                 Hoy alcanza con empezar.

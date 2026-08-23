@@ -22,7 +22,13 @@ export default function LandingFooter() {
             </span>
           </p>
           <p className="footer-subtext">
-            Rutinas diarias mínimas
+            Hoy con lo mínimo alcanza.
+          </p>
+          <p className="footer-credit">
+            Creado por{' '}
+            <a href="https://www.diegoquintero.com.ar/" target="_blank" rel="noopener noreferrer">
+              Diego Quintero
+            </a>
           </p>
         </div>
       </div>

@@ -1036,14 +1036,14 @@ html {
 
 /* Features Section */
 .features-section {
-  padding: 6rem 0;
+  padding: 4.5rem 0;
   position: relative;
   background: #ffffff;
 }
 
 @media (min-width: 1024px) {
   .features-section {
-    padding: 4rem 0;
+    padding: 3.5rem 0;
   }
 }
 
@@ -1064,47 +1064,50 @@ html {
   }
 }
 
-/* Philosophy Section */
+/* Philosophy Section (usada por "A tu ritmo") */
 .philosophy-section {
-  padding: 6rem 0;
+  padding: 4.5rem 0;
   background: var(--color-bg);
 }
 
 @media (min-width: 1024px) {
   .philosophy-section {
-    padding: 4rem 0;
+    padding: 3.5rem 0;
   }
 }
 
-/* CTA Section */
+/* Título y subtítulo de "A tu ritmo" más pegados: se leen como una sola idea */
+.philosophy-section .section-title {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .philosophy-section .section-title {
+    margin-bottom: 1.25rem;
+  }
+}
+
+.philosophy-section .cta-description {
+  margin-bottom: 0;
+}
+
+/* CTA Section (final, sin card) */
 .cta-section {
-  padding: 6rem 0;
-  background: #ffffff;
+  padding: 4.5rem 0;
+  background: var(--color-bg);
 }
 
 @media (min-width: 1024px) {
   .cta-section {
-    padding: 4rem 0;
+    padding: 3.5rem 0;
   }
 }
 
-.cta-card {
-  background: var(--color-card);
-  border-radius: 24px;
-  padding: 4rem 2rem;
-  text-align: center;
-  max-width: 600px;
+/* Sin card: el contenido respira directamente sobre el fondo de la sección */
+.cta-content {
+  max-width: 560px;
   margin: 0 auto;
-  box-shadow: 
-    0 4px 20px rgba(30, 127, 92, 0.08),
-    0 1px 3px rgba(30, 127, 92, 0.1);
-  border: 1px solid rgba(30, 127, 92, 0.1);
-}
-
-@media (min-width: 1024px) {
-  .cta-card {
-    padding: 5rem 3rem;
-  }
+  text-align: center;
 }
 
 .cta-title {
@@ -1123,10 +1126,11 @@ html {
 
 .cta-description {
   font-size: 1.125rem;
-  margin-bottom: 2.5rem;
+  margin: 0 auto 2.5rem;
   font-weight: 400;
   color: var(--text-secondary);
   line-height: 1.6;
+  max-width: 520px;
 }
 
 @media (min-width: 1024px) {
@@ -1134,6 +1138,11 @@ html {
     font-size: 1.25rem;
     margin-bottom: 3rem;
   }
+}
+
+/* En el CTA final, título + subtítulo + botones deben leerse como una sola unidad */
+.cta-content .cta-description {
+  margin-bottom: 2rem;
 }
 
 .cta-buttons {
@@ -1145,7 +1154,7 @@ html {
 
 /* Landing Footer */
 .landing-footer {
-  padding: 2rem 0;
+  padding: 1rem 0;
   border-top: 1px solid rgba(30, 127, 92, 0.1);
   margin-top: 0;
   background: var(--color-bg);
@@ -1175,8 +1184,28 @@ html {
 
 .footer-subtext {
   font-size: 0.8125rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+/* Línea de autoría: la de menor jerarquía del footer, no compite con Momentum */
+.footer-credit {
+  font-size: 0.75rem;
   color: var(--text-tertiary);
   font-weight: 400;
+  opacity: 0.9;
+  margin-top: 0.5rem;
+}
+
+.footer-credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(107, 114, 128, 0.35);
+  text-underline-offset: 2px;
+}
+
+.footer-credit a:hover {
+  color: var(--text-secondary);
 }
 
 /* ============================
@@ -1321,6 +1350,18 @@ html {
 /* ============================
    LANDING - "Vos decidís cuánto alcanza"
    ============================ */
+/* Mismo ritmo título→contenido que "Lo importante es volver" (ambas secciones
+   introducen un bloque de contenido, a diferencia de "A tu ritmo" que es más liviana) */
+.features-section .section-title {
+  margin-bottom: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .features-section .section-title {
+    margin-bottom: 3rem;
+  }
+}
+
 .example-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1372,10 +1413,9 @@ html {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
+  padding: 0.5rem 1rem;
   border-radius: 100px;
   background: var(--color-active);
-  border: 1px solid rgba(46, 204, 113, 0.25);
   color: var(--color-secondary);
   font-weight: 600;
   font-size: 0.9375rem;
@@ -1396,7 +1436,7 @@ html {
 .landing-rhythm-demo {
   display: flex;
   justify-content: center;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
 }
 
 .landing-rhythm-demo .day-selector {
@@ -1409,35 +1449,107 @@ html {
   font-size: 0.875rem;
 }
 
-/* ============================
-   LANDING - "Hoy" (demo con clases reales de la app)
-   ============================ */
-.landing-demo-progress {
-  max-width: 320px;
-  margin: 2.5rem auto 2rem;
-  text-align: center;
-}
+/* En pantallas muy chicas, 7 círculos de 42px no entran: achicar para que no se recorten */
+@media (max-width: 360px) {
+  .landing-rhythm-demo .day-selector {
+    gap: 0.3rem;
+  }
 
-.landing-demo-wrap {
-  max-width: 900px;
-  margin: 0 auto;
+  .landing-rhythm-demo .day-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
 }
 
 /* ============================
    LANDING - "Constancia" (demo con clases reales del historial)
+   Sección propia: mismo fondo que .philosophy-section pero con su
+   propio espaciado, para no afectar a "A tu ritmo" ni al historial real.
    ============================ */
+.landing-constancy-section {
+  padding: 4.5rem 0;
+  background: #ffffff;
+}
+
+@media (min-width: 1024px) {
+  .landing-constancy-section {
+    padding: 3.5rem 0;
+  }
+}
+
+.landing-constancy-section .section-title {
+  margin-bottom: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .landing-constancy-section .section-title {
+    margin-bottom: 3rem;
+  }
+}
+
 .landing-history-demo {
   max-width: 560px;
-  margin: 2.5rem auto 0;
+  margin: 0 auto;
+}
+
+/* Etiqueta de contexto, poca jerarquía: solo aclara qué son las filas de abajo */
+.landing-streaks-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  margin: 1.25rem 0 0.5rem;
 }
 
 .landing-streaks-demo {
-  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Rachas anteriores como filas históricas, un nivel por debajo de la card principal */
+.landing-streaks-demo .streak-item {
+  padding: 0.75rem 0.25rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(6, 95, 70, 0.08);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.landing-streaks-demo .streak-item:last-child {
+  border-bottom: none;
+}
+
+.landing-streaks-demo .streak-item:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.landing-streaks-demo .streak-days {
+  font-size: 1.0625rem;
+}
+
+[data-theme="dark"] .landing-streaks-demo .streak-item {
+  border-bottom-color: rgba(255, 255, 255, 0.07);
 }
 
 /* ============================
    LANDING - "Sin pendientes" (declaración, sin mockup)
    ============================ */
+/* Sección propia con su propio espaciado, para no afectar a otras secciones */
+.landing-statement-section {
+  padding: 5rem 0;
+  background: var(--color-bg);
+}
+
+@media (min-width: 1024px) {
+  .landing-statement-section {
+    padding: 3.5rem 0;
+  }
+}
+
 .statement-card {
   max-width: 640px;
   margin: 0 auto;
@@ -1463,11 +1575,26 @@ html {
   font-size: 1.0625rem;
   line-height: 1.7;
   color: var(--text-secondary);
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 /* ============================
    LANDING - Mensaje diferencial
+   Sección propia y liviana: es solo una frase, no necesita el mismo
+   espacio que una sección con título + contenido.
    ============================ */
+.landing-quote-section {
+  padding: 3.5rem 0;
+  background: #ffffff;
+}
+
+@media (min-width: 1024px) {
+  .landing-quote-section {
+    padding: 2.5rem 0;
+  }
+}
+
 .pull-quote {
   max-width: 640px;
   margin: 0 auto;
@@ -2194,18 +2321,7 @@ html {
   }
   
   .hero-section {
-    padding: 2rem 0;
-    min-height: 70vh;
-  }
-  
-  .features-section,
-  .philosophy-section,
-  .cta-section {
-    padding: 3rem 0;
-  }
-  
-  .landing-footer {
-    padding: 2rem 0;
+    padding: 2.5rem 0 3rem;
   }
 
   .hero-description {
@@ -2215,10 +2331,6 @@ html {
 
   .example-card {
     padding: 1.5rem 1rem;
-  }
-
-  .cta-card {
-    padding: 3rem 2rem;
   }
 }
 
@@ -3093,13 +3205,9 @@ html {
 /* === Landing === */
 
 [data-theme="dark"] .features-section,
-[data-theme="dark"] .cta-section {
+[data-theme="dark"] .landing-constancy-section,
+[data-theme="dark"] .landing-quote-section {
   background: var(--color-bg);
-}
-
-[data-theme="dark"] .cta-card {
-  border-color: rgba(255,255,255,0.07);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
 /* === Inputs === */
