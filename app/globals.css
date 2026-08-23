@@ -1,11 +1,14 @@
 :root {
-  /* Paleta de colores - Nueva */
+  /* Momentum Green: un único verde de marca (el mismo que usa el botón
+     activo "Tiempo" en Tus rutinas). Todas las variantes de abajo están
+     derivadas de este mismo verde (mezclado con blanco/negro), en vez de
+     ser tonos de verde elegidos independientemente. */
   --color-primary: #2ECC71;      /* Verde vivo - energía (acciones, progreso, estados positivos) */
-  --color-secondary: #1E7F5C;    /* Verde profundo - estabilidad */
+  --color-secondary: #208F4F;    /* --color-primary mezclado ~30% con negro: hover y estados oscuros derivados */
   --color-bg:rgb(241, 241, 241);           /* Fondo - blanco verdoso */
   --color-card: #ffffff;         /* Tarjetas - blanco */
-  --color-card-hover: #f0f9f6;   /* Card hover - blanco verdoso muy suave */
-  --color-active: #e8f5f0;      /* Card activa / modal - blanco verdoso claro */
+  --color-card-hover: #eefbf4;   /* --color-primary mezclado ~8% con blanco: hover muy sutil */
+  --color-active: #e6f9ee;      /* --color-primary mezclado ~12% con blanco: superficies seleccionadas/completadas */
   
   /* Texto */
   --text-primary: #1F2933;       /* Texto principal */
@@ -231,14 +234,14 @@ a {
 .btn-secondary {
   background: transparent;
   color: var(--text-secondary);
-  border: 1.5px solid rgba(30, 127, 92, 0.2);
+  border: 1.5px solid rgba(32, 143, 79, 0.2);
 }
 
 .btn-secondary:hover {
   background: var(--color-card-hover);
-  border-color: rgba(30, 127, 92, 0.3);
+  border-color: rgba(32, 143, 79, 0.3);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(30, 127, 92, 0.1);
+  box-shadow: 0 2px 8px rgba(32, 143, 79, 0.1);
 }
 
 .text-center {
@@ -462,7 +465,7 @@ a {
 .onboarding-input {
   width: 100%;
   padding: 1.125rem 1.5rem;
-  border: 1.5px solid rgba(30, 127, 92, 0.15);
+  border: 1.5px solid rgba(32, 143, 79, 0.15);
   border-radius: 16px;
   background: var(--color-card);
   color: var(--text-primary);
@@ -500,7 +503,7 @@ a {
 .onboarding-type-btn {
   flex: 1;
   padding: 1rem 1.5rem;
-  border: 1.5px solid rgba(30, 127, 92, 0.2);
+  border: 1.5px solid rgba(32, 143, 79, 0.2);
   border-radius: 16px;
   background: var(--color-card);
   color: var(--text-primary);
@@ -515,10 +518,10 @@ a {
 }
 
 .onboarding-type-btn:hover {
-  border-color: rgba(30, 127, 92, 0.3);
+  border-color: rgba(32, 143, 79, 0.3);
   background: var(--color-card-hover);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(30, 127, 92, 0.1);
+  box-shadow: 0 2px 8px rgba(32, 143, 79, 0.1);
 }
 
 .onboarding-type-btn-active {
@@ -557,7 +560,7 @@ a {
   justify-content: center;
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid rgba(30, 127, 92, 0.1);
+  border-top: 1px solid rgba(32, 143, 79, 0.1);
 }
 
 .routine-form .onboarding-input {
@@ -573,7 +576,7 @@ a {
   padding: 1rem 1.5rem;
   border-radius: 16px;
   background: var(--green-active); /* Verde muy claro */
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(46, 204, 113, 0.2); /* antes un verde suelto (16,185,129) ajeno al primary */
   box-shadow: 0 2px 8px rgba(6, 95, 70, 0.08);
   animation: slideIn 0.4s ease-out;
   text-align: center;
@@ -1145,7 +1148,7 @@ html {
 /* Landing Footer */
 .landing-footer {
   padding: 1rem 0;
-  border-top: 1px solid rgba(30, 127, 92, 0.1);
+  border-top: 1px solid rgba(32, 143, 79, 0.1);
   margin-top: 0;
   background: var(--color-bg);
 }
@@ -1231,10 +1234,10 @@ html {
   background: var(--color-card);
   border-radius: 24px;
   padding: 1.75rem;
-  border: 1px solid rgba(30, 127, 92, 0.1);
+  border: 1px solid rgba(32, 143, 79, 0.1);
   box-shadow:
-    0 4px 20px rgba(30, 127, 92, 0.08),
-    0 1px 3px rgba(30, 127, 92, 0.1);
+    0 4px 20px rgba(32, 143, 79, 0.08),
+    0 1px 3px rgba(32, 143, 79, 0.1);
   width: 100%;
   max-width: 380px;
   margin: 0 auto;
@@ -1370,11 +1373,11 @@ html {
   background: var(--color-card);
   border-radius: 16px;
   padding: 1.75rem 1.25rem;
-  border: 1px solid rgba(30, 127, 92, 0.1);
+  border: 1px solid rgba(32, 143, 79, 0.1);
   text-align: center;
   box-shadow:
-    0 2px 8px rgba(30, 127, 92, 0.06),
-    0 1px 2px rgba(30, 127, 92, 0.08);
+    0 2px 8px rgba(32, 143, 79, 0.06),
+    0 1px 2px rgba(32, 143, 79, 0.08);
 }
 
 .example-card-title {
@@ -1666,9 +1669,9 @@ html {
   background: var(--color-card-hover);
   transform: translateY(-2px);
   box-shadow: 
-    0 4px 20px rgba(30, 127, 92, 0.12),
-    0 2px 4px rgba(30, 127, 92, 0.1);
-  border-color: rgba(30, 127, 92, 0.2);
+    0 4px 20px rgba(32, 143, 79, 0.12),
+    0 2px 4px rgba(32, 143, 79, 0.1);
+  border-color: rgba(32, 143, 79, 0.2);
 }
 
 .routine-card:active {
@@ -2444,7 +2447,7 @@ html {
 /* Desktop: mantener overlay pero mejorado */
 @media (min-width: 1024px) {
   .modal-overlay {
-    background: rgba(30, 127, 92, 0.5);
+    background: rgba(32, 143, 79, 0.5);
     backdrop-filter: blur(12px);
     position: fixed;
     padding: 2rem;
@@ -2459,10 +2462,10 @@ html {
   width: 100%;
   max-height: 90vh;
   overflow: hidden;
-  border: 1.5px solid rgba(30, 127, 92, 0.15);
+  border: 1.5px solid rgba(32, 143, 79, 0.15);
   box-shadow: 
-    0 25px 80px rgba(30, 127, 92, 0.25),
-    0 8px 20px rgba(30, 127, 92, 0.15);
+    0 25px 80px rgba(32, 143, 79, 0.25),
+    0 8px 20px rgba(32, 143, 79, 0.15);
   animation: modalSlideUp 0.3s ease-out;
   position: relative;
   margin: auto;
@@ -2481,8 +2484,8 @@ html {
     max-width: 500px;
     max-height: 85vh;
     box-shadow: 
-      0 30px 100px rgba(30, 127, 92, 0.3),
-      0 10px 30px rgba(30, 127, 92, 0.2);
+      0 30px 100px rgba(32, 143, 79, 0.3),
+      0 10px 30px rgba(32, 143, 79, 0.2);
   }
 }
 
@@ -2526,7 +2529,7 @@ html {
 .login-divider-line {
   flex: 1;
   height: 1px;
-  background-color: rgba(30, 127, 92, 0.15);
+  background-color: rgba(32, 143, 79, 0.15);
 }
 
 /* Login Modal Styles */
@@ -2563,7 +2566,7 @@ html {
 .login-divider-line {
   flex: 1;
   height: 1px;
-  background-color: rgba(30, 127, 92, 0.15);
+  background-color: rgba(32, 143, 79, 0.15);
 }
 
 @keyframes modalSlideUp {
@@ -2582,7 +2585,7 @@ html {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 2rem;
-  border-bottom: 1px solid rgba(30, 127, 92, 0.1);
+  border-bottom: 1px solid rgba(32, 143, 79, 0.1);
   position: sticky;
   top: 0;
   background: var(--color-card);
@@ -2639,14 +2642,14 @@ html {
   padding: 1rem 1.25rem;
   background: var(--color-card-hover);
   border-radius: 12px;
-  border: 1px solid rgba(30, 127, 92, 0.1);
+  border: 1px solid rgba(32, 143, 79, 0.1);
   transition: all 0.2s ease-out;
   gap: 1rem;
 }
 
 .routine-detail-item:hover {
   background: var(--color-active);
-  border-color: rgba(30, 127, 92, 0.15);
+  border-color: rgba(32, 143, 79, 0.15);
 }
 
 .routine-detail-label {
@@ -2791,7 +2794,7 @@ html {
   border-color: var(--color-primary); /* Verde vivo para acciones */
   box-shadow: 
     0 0 0 4px rgba(46, 204, 113, 0.1),
-    0 4px 12px rgba(30, 127, 92, 0.1);
+    0 4px 12px rgba(32, 143, 79, 0.1);
   transform: translateY(-1px);
   color: var(--text-primary) !important;
   -webkit-text-fill-color: var(--text-primary); /* Para Safari/iOS */
@@ -2811,7 +2814,7 @@ html {
 .modal-quick-btn {
   padding: 1rem 0.5rem;
   background: var(--color-card-hover);
-  border: 2px solid rgba(30, 127, 92, 0.15);
+  border: 2px solid rgba(32, 143, 79, 0.15);
   border-radius: 16px;
   color: var(--text-secondary);
   font-size: 0.9rem;
@@ -2824,7 +2827,7 @@ html {
 
 .modal-quick-btn:hover {
   background: var(--color-card);
-  border-color: rgba(30, 127, 92, 0.25);
+  border-color: rgba(32, 143, 79, 0.25);
   transform: translateY(-1px);
 }
 
@@ -3188,9 +3191,9 @@ html {
   --color-bg: #0F1117;
   --color-card: #1A1D2E;
   --color-card-hover: #20243A;
-  --color-active: #182A24;
+  --color-active: #0c371f; /* --color-primary mezclado ~27% con negro, mismo verde de marca */
   --color-primary: #2ECC71;
-  --color-secondary: #34D872;
+  --color-secondary: #4dd486; /* --color-primary mezclado ~15% con blanco: variante clara para legibilidad sobre fondo oscuro */
   --text-primary: #E8ECEF;
   --text-secondary: #9BA3AF;
   --text-tertiary: #6B7280;
