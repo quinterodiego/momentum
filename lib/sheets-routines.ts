@@ -357,7 +357,7 @@ export async function deleteDailyLog(logId: string): Promise<void> {
  */
 export async function updateRoutine(
   routineId: string,
-  updates: { title?: string; minValue?: number; unit?: string; scheduledDays?: number[] }
+  updates: { title?: string; type?: 'time' | 'quantity'; minValue?: number; unit?: string; scheduledDays?: number[] }
 ): Promise<Routine> {
   const { sheets, spreadsheetId } = getSheetsClient();
 
@@ -376,6 +376,7 @@ export async function updateRoutine(
 
     const routine = rows[rowIndex];
     const updatedTitle = updates.title ?? routine[2];
+    const updatedType = updates.type ?? routine[3];
     const updatedMinValue = updates.minValue ?? parseFloat(routine[4]);
     const updatedUnit = updates.unit ?? routine[5];
     const updatedScheduledDays = updates.scheduledDays ?? parseScheduledDays(routine[7]);
@@ -386,7 +387,7 @@ export async function updateRoutine(
       range: `routines!C${actualRowIndex}:F${actualRowIndex}`,
       valueInputOption: 'RAW',
       requestBody: {
-        values: [[updatedTitle, routine[3], updatedMinValue, updatedUnit]],
+        values: [[updatedTitle, updatedType, updatedMinValue, updatedUnit]],
       },
     });
 
@@ -403,7 +404,7 @@ export async function updateRoutine(
       id: routine[0],
       userId: routine[1],
       title: updatedTitle,
-      type: routine[3] as 'time' | 'quantity',
+      type: updatedType as 'time' | 'quantity',
       minValue: updatedMinValue,
       unit: updatedUnit,
       active: routine[6] === 'TRUE',

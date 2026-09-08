@@ -1,24 +1,34 @@
 :root {
-  /* Momentum Green: un único verde de marca (el mismo que usa el botón
-     activo "Tiempo" en Tus rutinas). Todas las variantes de abajo están
-     derivadas de este mismo verde (mezclado con blanco/negro), en vez de
-     ser tonos de verde elegidos independientemente. */
+  /* Momentum Green: un único verde de marca (el mismo que usa el CTA
+     "Continuar con Google" y el botón activo "Tiempo" en Tus rutinas).
+     Todas las variantes de abajo están derivadas de este mismo verde
+     (mezclado con blanco/negro), en vez de ser tonos elegidos
+     independientemente. */
   --color-primary: #2ECC71;      /* Verde vivo - energía (acciones, progreso, estados positivos) */
   --color-secondary: #208F4F;    /* --color-primary mezclado ~30% con negro: hover y estados oscuros derivados */
   --color-bg:rgb(241, 241, 241);           /* Fondo - blanco verdoso */
   --color-card: #ffffff;         /* Tarjetas - blanco */
   --color-card-hover: #eefbf4;   /* --color-primary mezclado ~8% con blanco: hover muy sutil */
   --color-active: #e6f9ee;      /* --color-primary mezclado ~12% con blanco: superficies seleccionadas/completadas */
-  
+
+  /* Jerarquía de color: Verde (acción principal) > Amarillo (segundo nivel /
+     logro) > Rojo (aviso / error). Amarillo y rojo comparten el mismo
+     "estilo" que el verde: mismo tratamiento de botón (sombra, ripple,
+     hover que mezcla ~30% negro). */
+  --color-yellow: #FFD21F;
+  --color-yellow-dark: #B39316;  /* --color-yellow mezclado ~30% con negro: hover */
+  --color-red: #FF4B3E;
+  --color-red-dark: #B3352B;     /* --color-red mezclado ~30% con negro: hover / texto de error */
+
   /* Texto */
   --text-primary: #1F2933;       /* Texto principal */
   --text-secondary: #6B7280;     /* Texto secundario */
   --text-tertiary: #9CA3AF;      /* Texto terciario (hints) */
-  
+
   /* Acentos */
-  --accent-yellow: #F6E27F;       /* Logro / progreso */
+  --accent-yellow: var(--color-yellow); /* Logro / progreso */
   --accent-blue: #7DD3FC;        /* Acción secundaria */
-  
+
   /* Variables legacy para compatibilidad (usar nuevas cuando sea posible) */
   --green-bg: var(--color-bg);
   --green-card: var(--color-card);
@@ -242,6 +252,102 @@ a {
   border-color: rgba(32, 143, 79, 0.3);
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(32, 143, 79, 0.1);
+}
+
+/* Segundo nivel de jerarquía (logro / énfasis secundario): mismo
+   tratamiento que .btn-primary, en amarillo. Texto oscuro porque el
+   amarillo es demasiado claro para texto blanco legible. */
+.btn-warning {
+  background: var(--color-yellow);
+  color: #1F2933; /* Texto oscuro fijo: el amarillo no cambia entre temas y necesita contraste alto */
+  box-shadow:
+    0 6px 20px rgba(255, 210, 31, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  font-weight: 700;
+  min-height: 56px;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-warning::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 210, 31, 0.15);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-warning:hover::before {
+  width: 400px;
+  height: 400px;
+}
+
+.btn-warning:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 12px rgba(255, 210, 31, 0.35),
+    0 2px 4px rgba(255, 210, 31, 0.25);
+  background: var(--color-yellow-dark);
+  color: #ffffff;
+}
+
+.btn-warning:active {
+  transform: translateY(-1px) scale(1);
+}
+
+/* Tercer nivel de jerarquía (aviso / error): mismo tratamiento que
+   .btn-primary, en rojo. */
+.btn-danger {
+  background: var(--color-red);
+  color: #ffffff;
+  box-shadow:
+    0 6px 20px rgba(255, 75, 62, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  font-weight: 700;
+  min-height: 56px;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-danger::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 75, 62, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-danger:hover::before {
+  width: 400px;
+  height: 400px;
+}
+
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 12px rgba(255, 75, 62, 0.35),
+    0 2px 4px rgba(255, 75, 62, 0.25);
+  background: var(--color-red-dark);
+}
+
+.btn-danger:active {
+  transform: translateY(-1px) scale(1);
 }
 
 .text-center {
@@ -792,21 +898,10 @@ a {
 /* === MÓVILES MODERNOS (≤ 480px) ===
    Cubre iPhone 14/15 Pro (390px), Android estándar (412px)
 */
-@media (max-width: 480px) {
-  .page-title {
-    font-size: 1.5rem;
-  }
-
-  .header-actions {
-    gap: 0.5rem;
-  }
-
-  .header-icon {
-    min-width: 36px;
-    min-height: 36px;
-    padding: 0.4rem;
-  }
-}
+/* Los ajustes de .page-title / .header-actions / .header-icon para
+   ≤480px y ≤360px están reubicados más abajo, después de sus reglas base,
+   para que la cascada los respete: acá quedaban pisados por definiciones
+   incondicionales posteriores en el archivo. */
 
 /* === PANTALLAS MUY PEQUEÑAS (≤ 360px) ===
    Cubre iPhone SE, Android Entry-level, zoom > 125%
@@ -819,19 +914,6 @@ a {
   .card {
     padding: 1.5rem 1rem;
     border-radius: 20px;
-  }
-
-  .page-title {
-    font-size: 1.35rem;
-  }
-
-  .header-actions {
-    gap: 0.4rem;
-  }
-
-  .header-icon {
-    min-width: 36px;
-    min-height: 36px;
   }
 
   .routine-card {
@@ -1814,6 +1896,36 @@ html {
   object-fit: contain;
 }
 
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .page-title-content {
+    gap: 0.5rem;
+  }
+
+  .page-title-icon {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+@media (max-width: 360px) {
+  .page-title {
+    font-size: 1.3rem;
+  }
+
+  .page-title-content {
+    gap: 0.4rem;
+  }
+
+  .page-title-icon {
+    width: 22px;
+    height: 22px;
+  }
+}
+
 /* Desktop: título más grande */
 @media (min-width: 1024px) {
   .page-title {
@@ -1935,6 +2047,54 @@ html {
   align-items: center;
   gap: 0.75rem;
   flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .header-actions {
+    gap: 0.5rem;
+  }
+
+  .header-icon {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0.4rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .header-actions {
+    gap: 0.375rem;
+  }
+
+  .header-icon {
+    min-width: 34px;
+    min-height: 34px;
+  }
+}
+
+/* Dashboard: el título (logo + "Momentum") y los íconos de acción del
+   header compiten por el mismo ancho, que está limitado por el
+   max-width de .card (420px) en TODO el rango 0-1023px de viewport (no
+   solo en mobile angosto). Una sola fila no alcanza de forma cómoda sin
+   achicar los tap targets, así que las acciones pasan a su propia fila
+   por debajo de 1024px. */
+.dashboard-page-header {
+  flex-wrap: wrap;
+}
+
+.dashboard-page-header .header-actions {
+  flex-basis: 100%;
+  justify-content: flex-end;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-page-header {
+    flex-wrap: nowrap;
+  }
+
+  .dashboard-page-header .header-actions {
+    flex-basis: auto;
+  }
 }
 
 /* Dashboard Content Grid - Mobile-first, simple */
@@ -2240,9 +2400,9 @@ html {
 }
 
 .undo-toast-content {
-  background: rgba(246, 226, 127, 0.25); /* Acento amarillo */
+  background: rgba(255, 210, 31, 0.2); /* Acento amarillo */
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(246, 226, 127, 0.4);
+  border: 1px solid rgba(255, 210, 31, 0.4);
   border-radius: 12px;
   padding: 1rem 1.5rem;
   display: flex;
@@ -2510,10 +2670,10 @@ html {
 .login-error {
   padding: 1rem;
   margin-bottom: 1.5rem;
-  background-color: #fee;
-  border: 1px solid #fcc;
+  background-color: #FFF1F0; /* --color-red mezclado ~92% con blanco */
+  border: 1px solid #FFDBD8; /* --color-red mezclado ~80% con blanco */
   border-radius: 12px;
-  color: #c33;
+  color: var(--color-red-dark);
   font-size: 0.9375rem;
 }
 
@@ -2535,38 +2695,6 @@ html {
 /* Login Modal Styles */
 .login-modal-content {
   max-width: 440px;
-}
-
-.login-modal-subtitle {
-  text-align: center;
-  font-size: 0.9375rem;
-  color: var(--text-secondary);
-  margin-bottom: 1.5rem;
-}
-
-.login-error {
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  background-color: #fee;
-  border: 1px solid #fcc;
-  border-radius: 12px;
-  color: #c33;
-  font-size: 0.9375rem;
-}
-
-.login-divider {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin: 1.5rem 0;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-}
-
-.login-divider-line {
-  flex: 1;
-  height: 1px;
-  background-color: rgba(32, 143, 79, 0.15);
 }
 
 @keyframes modalSlideUp {
@@ -3197,7 +3325,6 @@ html {
   --text-primary: #E8ECEF;
   --text-secondary: #9BA3AF;
   --text-tertiary: #6B7280;
-  --accent-yellow: #F6E27F;
   --accent-blue: #7DD3FC;
   --green-bg: var(--color-bg);
   --green-card: var(--color-card);
@@ -3384,9 +3511,9 @@ html {
 /* === Errors === */
 
 [data-theme="dark"] .login-error {
-  background-color: rgba(204,51,51,0.12);
-  border-color: rgba(204,51,51,0.25);
-  color: #ff8080;
+  background-color: rgba(255,75,62,0.12);
+  border-color: rgba(255,75,62,0.25);
+  color: #FF786E; /* --color-red mezclado ~25% con blanco: legible sobre fondo oscuro */
 }
 
 /* === Settings === */
@@ -3409,8 +3536,8 @@ html {
 /* === Undo toast === */
 
 [data-theme="dark"] .undo-toast-content {
-  background: rgba(246,226,127,0.1);
-  border-color: rgba(246,226,127,0.25);
+  background: rgba(255,210,31,0.1);
+  border-color: rgba(255,210,31,0.25);
   box-shadow: 0 8px 24px rgba(0,0,0,0.6);
 }
 

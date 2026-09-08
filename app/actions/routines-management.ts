@@ -32,7 +32,7 @@ export async function createUserRoutine(
  */
 export async function updateUserRoutine(
   routineId: string,
-  updates: { title?: string; minValue?: number; unit?: string; scheduledDays?: number[] }
+  updates: { title?: string; type?: 'time' | 'quantity'; minValue?: number; unit?: string; scheduledDays?: number[] }
 ) {
   try {
     await updateRoutine(routineId, updates);

@@ -48,7 +48,7 @@ export default async function DashboardPage({
   return (
     <div className="container">
       <div className="card">
-        <div className="page-header">
+        <div className="page-header dashboard-page-header">
           <h1 className="page-title">
             <span className="page-title-content">
               <span>Momentum</span>

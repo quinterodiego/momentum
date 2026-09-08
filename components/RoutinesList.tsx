@@ -16,6 +16,7 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
   const router = useRouter();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
+  const [editType, setEditType] = useState<'time' | 'quantity'>('time');
   const [editMinValue, setEditMinValue] = useState('');
   const [editUnit, setEditUnit] = useState('');
   const [editScheduledDays, setEditScheduledDays] = useState<number[]>([]);
@@ -26,6 +27,7 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
   const handleEdit = (routine: Routine) => {
     setEditingId(routine.id);
     setEditTitle(routine.title);
+    setEditType(routine.type);
     setEditMinValue(routine.minValue.toString());
     setEditUnit(routine.unit);
     // Si scheduledDays está vacío, mostrar todos seleccionados para edición
@@ -40,8 +42,9 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
     try {
       await updateUserRoutine(routineId, {
         title: editTitle,
+        type: editType,
         minValue: parseFloat(editMinValue) || 1,
-        unit: editUnit,
+        unit: editType === 'time' ? 'min' : editUnit,
         scheduledDays: editScheduledDays.length === 7 ? [] : editScheduledDays,
       });
       setEditingId(null);
@@ -90,6 +93,32 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
                 style={{ marginBottom: '0.5rem' }}
               />
               <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditType('time');
+                    setEditUnit('min');
+                  }}
+                  className={`btn ${editType === 'time' ? 'btn-primary' : 'btn-secondary'}`}
+                  style={{ flex: 1, maxWidth: 'none', padding: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center' }}
+                >
+                  <Timer size={16} />
+                  Tiempo
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditType('quantity');
+                    if (editUnit === 'min') setEditUnit('vez');
+                  }}
+                  className={`btn ${editType === 'quantity' ? 'btn-primary' : 'btn-secondary'}`}
+                  style={{ flex: 1, maxWidth: 'none', padding: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center' }}
+                >
+                  <Hash size={16} />
+                  Cantidad
+                </button>
+              </div>
+              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
                 <input
                   type="number"
                   value={editMinValue}
@@ -98,13 +127,14 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
                   style={{ flex: 1 }}
                   min="1"
                 />
-                {routine.type === 'quantity' && (
+                {editType === 'quantity' && (
                   <input
                     type="text"
                     value={editUnit}
                     onChange={(e) => setEditUnit(e.target.value)}
                     className="onboarding-input"
                     style={{ flex: 1 }}
+                    placeholder="Ej: carilla, litro, vez..."
                   />
                 )}
               </div>
