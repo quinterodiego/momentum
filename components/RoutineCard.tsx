@@ -29,12 +29,30 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
 
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleClick = async () => {
+  const handleClick = () => {
     if (isLoading) {
       return;
     }
-    // Abrir modal de detalles
-    setShowDetailModal(true);
+
+    if (routine.completed) {
+      // Ya cumplida: abrir detalle para editar o desmarcar
+      setShowDetailModal(true);
+      return;
+    }
+
+    if (routine.type === 'time') {
+      // Ir directo al timer, sin pasar por el modal de detalle
+      router.push(`/focus?routineId=${routine.id}`);
+      return;
+    }
+
+    // Quantity: un solo toque la marca cumplida con el mínimo
+    handleConfirmValue(routine.minValue);
+  };
+
+  const handleCustomizeValue = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowValueModal(true);
   };
 
   const handleConfirmValue = async (value: number) => {
@@ -154,9 +172,18 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
                 <Play size={14} /> Empezar
               </span>
             ) : (
-              <span className="routine-action-text">
-                Marcar como cumplida <ArrowRight size={14} />
-              </span>
+              <>
+                <span className="routine-action-text">
+                  Tocar para completar <ArrowRight size={14} />
+                </span>
+                <button
+                  type="button"
+                  onClick={handleCustomizeValue}
+                  className="routine-action-secondary"
+                >
+                  Personalizar cantidad
+                </button>
+              </>
             )}
           </div>
         )}
