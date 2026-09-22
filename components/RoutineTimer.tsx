@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { completeTimeRoutine, abandonTimeRoutine } from '@/app/actions/routines';
 import { useRouter } from 'next/navigation';
 import UndoToast from './UndoToast';
@@ -26,64 +26,61 @@ export default function RoutineTimer({
   const [undoLogId, setUndoLogId] = useState<string | null>(null);
   const [showCelebration, setShowCelebration] = useState(false);
 
-  useEffect(() => {
-    if (remainingMs <= 0 && !isCompleted) {
-      // Auto-completar cuando llega a 0
-      setIsCompleted(true);
-      setShowCelebration(true);
-      setTimeout(() => setShowCelebration(false), 2000);
-      completeTimeRoutine(routineId, userId, duration).then((result) => {
-        if (result.success) {
-          setUndoLogId(result.logId);
-          setShowUndo(true);
-          router.refresh();
-        }
-      });
-      return;
+  // Evita disparar completeTimeRoutine más de una vez (llegada natural a 0 + click manual)
+  const hasCompletedRef = useRef(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const finishRoutine = () => {
+    if (hasCompletedRef.current) return;
+    hasCompletedRef.current = true;
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
 
-    const interval = setInterval(() => {
+    setIsCompleted(true);
+    setShowCelebration(true);
+    setTimeout(() => setShowCelebration(false), 2000);
+
+    // Se registra siempre el mínimo planificado: completar (a tiempo o antes) cuenta como cumplido.
+    completeTimeRoutine(routineId, userId, duration).then((result) => {
+      if (result.success) {
+        setUndoLogId(result.logId);
+        setShowUndo(true);
+        router.refresh();
+      }
+    });
+  };
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
       setRemainingMs((prev) => {
         const newRemaining = prev - 1000;
         if (newRemaining <= 0) {
-          setIsCompleted(true);
-          setShowCelebration(true);
-          setTimeout(() => setShowCelebration(false), 2000);
-          completeTimeRoutine(routineId, userId, duration).then((result) => {
-            if (result.success) {
-              setUndoLogId(result.logId);
-              setShowUndo(true);
-              router.refresh();
-            }
-          });
+          finishRoutine();
           return 0;
         }
         return newRemaining;
       });
     }, 1000);
 
-    return () => clearInterval(interval);
-  }, [routineId, userId, duration, isCompleted, remainingMs, router]);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+    // Se crea un único interval al montar; finishRoutine se guarda por ref para evitar duplicados.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const minutes = Math.floor(remainingMs / 60000);
   const seconds = Math.floor((remainingMs % 60000) / 1000);
   const percentage = (remainingMs / (duration * 60 * 1000)) * 100;
 
-  const handleComplete = async () => {
-    if (isCompleted) return;
-    
-    const actualMinutes = duration - (remainingMs / 60000);
-    setIsCompleted(true);
-    setShowCelebration(true);
-    setTimeout(() => setShowCelebration(false), 2000);
-    const result = await completeTimeRoutine(routineId, userId, Math.max(actualMinutes, duration));
-    
-    // Si se completó exitosamente, mostrar undo toast
-    if (result.success) {
-      setUndoLogId(result.logId);
-      setShowUndo(true);
-      router.refresh();
-    }
+  const handleComplete = () => {
+    finishRoutine();
   };
 
   const handleAbandon = () => {

@@ -69,12 +69,8 @@ export async function abandonTimeRoutine(
   routineId: string,
   userId: string
 ) {
-  try {
-    // No crear log, solo redirigir
-    // No penalizar, no romper racha
-    redirect('/dashboard?abandoned=true');
-  } catch (error) {
-    console.error('Error abandonando rutina:', error);
-    throw error;
-  }
+  // No crear log, solo redirigir. No penalizar, no romper racha.
+  // redirect() funciona lanzando una excepción especial (NEXT_REDIRECT) que
+  // Next.js intercepta más arriba: no debe envolverse en try/catch.
+  redirect('/dashboard?abandoned=true');
 }
