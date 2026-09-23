@@ -5,7 +5,6 @@ import { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Check, ArrowRight, Play } from 'lucide-react';
 import type { RoutineWithStatus } from '@/lib/types';
-import UndoToast from './UndoToast';
 import RoutineDetailModal from './RoutineDetailModal';
 import { CelebrationEffect } from './CelebrationEffect';
 
@@ -17,8 +16,6 @@ interface RoutineCardProps {
 export default function RoutineCard({ routine, userId }: RoutineCardProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [showUndo, setShowUndo] = useState(false);
-  const [undoLogId, setUndoLogId] = useState<string | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [justCompleted, setJustCompleted] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
@@ -60,9 +57,7 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
       });
       const result = await response.json();
 
-      if (result.success && result.logId) {
-        setUndoLogId(result.logId);
-        setShowUndo(true);
+      if (result.success) {
         setJustCompleted(true);
         setShowCelebration(true);
         setTimeout(() => setJustCompleted(false), 600);
@@ -74,11 +69,6 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleUndoTimeout = () => {
-    setShowUndo(false);
-    setUndoLogId(null);
   };
 
   return (
@@ -139,15 +129,6 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
               </span>
             )}
           </div>
-        )}
-
-        {showUndo && undoLogId && (
-          <UndoToast
-            logId={undoLogId}
-            userId={userId}
-            routineTitle={routine.title}
-            onUndo={handleUndoTimeout}
-          />
         )}
       </div>
 

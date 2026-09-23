@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { completeTimeRoutine, abandonTimeRoutine } from '@/app/actions/routines';
 import { useRouter } from 'next/navigation';
-import UndoToast from './UndoToast';
 import { CelebrationEffect } from './CelebrationEffect';
 
 interface RoutineTimerProps {
@@ -22,8 +21,6 @@ export default function RoutineTimer({
   const router = useRouter();
   const [remainingMs, setRemainingMs] = useState(duration * 60 * 1000);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [showUndo, setShowUndo] = useState(false);
-  const [undoLogId, setUndoLogId] = useState<string | null>(null);
   const [showCelebration, setShowCelebration] = useState(false);
 
   // Evita disparar completeTimeRoutine más de una vez (llegada natural a 0 + click manual)
@@ -46,8 +43,6 @@ export default function RoutineTimer({
     // Se registra siempre el mínimo planificado: completar (a tiempo o antes) cuenta como cumplido.
     completeTimeRoutine(routineId, userId, duration).then((result) => {
       if (result.success) {
-        setUndoLogId(result.logId);
-        setShowUndo(true);
         router.refresh();
       }
     });
@@ -85,11 +80,6 @@ export default function RoutineTimer({
 
   const handleAbandon = () => {
     abandonTimeRoutine(routineId, userId);
-  };
-
-  const handleUndoTimeout = () => {
-    setShowUndo(false);
-    setUndoLogId(null);
   };
 
   return (
@@ -134,15 +124,6 @@ export default function RoutineTimer({
           <p className="mt-4 text-lg opacity-80">
             Cumpliste el mínimo. Eso alcanza.
           </p>
-        )}
-
-        {showUndo && undoLogId && (
-          <UndoToast
-            logId={undoLogId}
-            userId={userId}
-            routineTitle={routineTitle}
-            onUndo={handleUndoTimeout}
-          />
         )}
       </div>
     </>
