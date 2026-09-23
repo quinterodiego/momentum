@@ -1,10 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { X, Timer, Hash, Check, Pencil, XCircle } from 'lucide-react';
+import { X, Timer, Hash, Check, XCircle } from 'lucide-react';
 import type { RoutineWithStatus } from '@/lib/types';
-import ValueInputModal from './ValueInputModal';
-import EditValueModal from './EditValueModal';
 import { useRouter } from 'next/navigation';
 
 interface RoutineDetailModalProps {
@@ -21,25 +18,14 @@ export default function RoutineDetailModal({
   onRoutineCompleted,
 }: RoutineDetailModalProps) {
   const router = useRouter();
-  const [showValueModal, setShowValueModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
 
   const handleStartTime = () => {
     router.push(`/focus?routineId=${routine.id}`);
   };
 
-  const handleMarkComplete = () => {
-    if (routine.completed) {
-      setShowEditModal(true);
-    } else {
-      setShowValueModal(true);
-    }
-  };
-
-  const handleValueConfirm = async (value: number) => {
-    setShowValueModal(false);
-    
-    // Completar la rutina quantity-based
+  const handleMarkComplete = async () => {
+    // Solo marca cumplida con el mínimo. No se puede editar el valor desde acá:
+    // eso se hace desde la sección de edición de la rutina (Ajustes).
     try {
       const response = await fetch('/api/routines/complete', {
         method: 'POST',
@@ -47,11 +33,11 @@ export default function RoutineDetailModal({
         body: JSON.stringify({
           routineId: routine.id,
           type: 'quantity',
-          value: value,
+          value: routine.minValue,
         }),
       });
       const result = await response.json();
-      
+
       if (result.success) {
         onClose();
         if (onRoutineCompleted) {
@@ -61,29 +47,6 @@ export default function RoutineDetailModal({
       }
     } catch (error) {
       console.error('Error completando rutina:', error);
-    }
-  };
-
-  const handleEditConfirm = async (value: number) => {
-    setShowEditModal(false);
-    onClose();
-    
-    // Actualizar el valor del log
-    try {
-      const response = await fetch('/api/routines/update-log', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          logId: routine.todayLog?.id,
-          value: value,
-        }),
-      });
-      
-      if (response.ok) {
-        router.refresh();
-      }
-    } catch (error) {
-      console.error('Error actualizando valor:', error);
     }
   };
 
@@ -113,9 +76,8 @@ export default function RoutineDetailModal({
   };
 
   return (
-    <>
-      <div 
-        className="modal-overlay" 
+      <div
+        className="modal-overlay"
         onClick={(e) => {
           // Solo cerrar si el click es directamente en el overlay, no en el contenido
           if (e.target === e.currentTarget) {
@@ -169,11 +131,6 @@ export default function RoutineDetailModal({
                   <span className="routine-detail-label">Cumpliste hoy:</span>
                   <span className="routine-detail-value routine-detail-completed">
                     {routine.todayLog.value} {routine.unit}
-                    {routine.todayLog.value > routine.minValue && (
-                      <span className="routine-extra">
-                        {' '}(+{((routine.todayLog.value / routine.minValue - 1) * 100).toFixed(0)}%)
-                      </span>
-                    )}
                   </span>
                 </div>
               )}
@@ -206,34 +163,14 @@ export default function RoutineDetailModal({
                 </button>
               )}
               
-              {routine.type === 'quantity' && (
+              {routine.type === 'quantity' && !routine.completed && (
                 <button
                   onClick={handleMarkComplete}
                   className="btn btn-primary modal-action-btn"
                   style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}
                 >
-                  {routine.completed ? (
-                    <>
-                      <Pencil size={18} />
-                      Editar valor
-                    </>
-                  ) : (
-                    <>
-                      <Check size={18} />
-                      Marcar como cumplida
-                    </>
-                  )}
-                </button>
-              )}
-
-              {routine.completed && routine.type === 'time' && (
-                <button
-                  onClick={handleMarkComplete}
-                  className="btn btn-primary modal-action-btn"
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}
-                >
-                  <Pencil size={18} />
-                  Editar valor
+                  <Check size={18} />
+                  Marcar como cumplida
                 </button>
               )}
 
@@ -258,30 +195,5 @@ export default function RoutineDetailModal({
           </div>
         </div>
       </div>
-
-      {showValueModal && (
-        <ValueInputModal
-          routineTitle={routine.title}
-          minValue={routine.minValue}
-          unit={routine.unit}
-          onConfirm={handleValueConfirm}
-          onCancel={() => {
-            setShowValueModal(false);
-          }}
-        />
-      )}
-
-      {showEditModal && routine.todayLog && (
-        <EditValueModal
-          routineTitle={routine.title}
-          currentValue={routine.todayLog.value || routine.minValue}
-          unit={routine.unit}
-          onConfirm={handleEditConfirm}
-          onCancel={() => {
-            setShowEditModal(false);
-          }}
-        />
-      )}
-    </>
   );
 }

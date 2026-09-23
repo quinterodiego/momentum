@@ -21,19 +21,20 @@ export default function CreateRoutineForm({ userId }: CreateRoutineFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!title.trim()) {
+
+    const numMinValue = parseFloat(minValue);
+    if (!title.trim() || !numMinValue || numMinValue <= 0) {
       return;
     }
 
     setIsLoading(true);
-    
+
     try {
       await createUserRoutine(
         userId,
         title.trim(),
         type,
-        parseFloat(minValue) || 1,
+        numMinValue,
         type === 'time' ? 'min' : unit,
         scheduledDays.length === 7 ? [] : scheduledDays
       );
@@ -112,7 +113,8 @@ export default function CreateRoutineForm({ userId }: CreateRoutineFormProps) {
             type="number"
             value={minValue}
             onChange={(e) => setMinValue(e.target.value)}
-            min="1"
+            min="0.1"
+            step="0.1"
             className="onboarding-input"
             disabled={isLoading}
             required
@@ -150,7 +152,7 @@ export default function CreateRoutineForm({ userId }: CreateRoutineFormProps) {
 
       <button
         type="submit"
-        disabled={isLoading || !title.trim()}
+        disabled={isLoading || !title.trim() || !(parseFloat(minValue) > 0)}
         className="btn btn-primary mt-2"
         style={{ 
           fontSize: '1.125rem',

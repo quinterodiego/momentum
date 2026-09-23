@@ -6,8 +6,6 @@ import { createPortal } from 'react-dom';
 import { Check, ArrowRight, Play } from 'lucide-react';
 import type { RoutineWithStatus } from '@/lib/types';
 import UndoToast from './UndoToast';
-import ValueInputModal from './ValueInputModal';
-import EditValueModal from './EditValueModal';
 import RoutineDetailModal from './RoutineDetailModal';
 import { CelebrationEffect } from './CelebrationEffect';
 
@@ -21,8 +19,6 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showUndo, setShowUndo] = useState(false);
   const [undoLogId, setUndoLogId] = useState<string | null>(null);
-  const [showValueModal, setShowValueModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [justCompleted, setJustCompleted] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
@@ -35,7 +31,7 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
     }
 
     if (routine.completed) {
-      // Ya cumplida: abrir detalle para editar o desmarcar
+      // Ya cumplida: abrir detalle solo para desmarcar
       setShowDetailModal(true);
       return;
     }
@@ -46,17 +42,11 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
       return;
     }
 
-    // Quantity: un solo toque la marca cumplida con el mínimo
-    handleConfirmValue(routine.minValue);
+    // Quantity: un solo toque la marca cumplida con el mínimo. Sin edición de valor.
+    handleComplete();
   };
 
-  const handleCustomizeValue = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowValueModal(true);
-  };
-
-  const handleConfirmValue = async (value: number) => {
-    setShowValueModal(false);
+  const handleComplete = async () => {
     setIsLoading(true);
     try {
       const response = await fetch('/api/routines/complete', {
@@ -65,11 +55,11 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
         body: JSON.stringify({
           routineId: routine.id,
           type: 'quantity',
-          value: value,
+          value: routine.minValue,
         }),
       });
       const result = await response.json();
-      
+
       if (result.success && result.logId) {
         setUndoLogId(result.logId);
         setShowUndo(true);
@@ -81,29 +71,6 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
       }
     } catch (error) {
       console.error('Error completando rutina:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleEditValue = async (newValue: number) => {
-    setShowEditModal(false);
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/routines/update-log', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          logId: routine.todayLog?.id,
-          value: newValue,
-        }),
-      });
-      
-      if (response.ok) {
-        router.refresh();
-      }
-    } catch (error) {
-      console.error('Error actualizando valor:', error);
     } finally {
       setIsLoading(false);
     }
@@ -155,11 +122,6 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
           </span>
           <span className="routine-value-label">
             {routine.completed ? 'Cumplido hoy' : 'Mínimo de hoy'}
-            {routine.completed && routine.todayLog && routine.todayLog.value > routine.minValue && (
-              <span className="routine-extra" title="Tocar para editar">
-                {' '}(+{((routine.todayLog.value / routine.minValue - 1) * 100).toFixed(0)}%)
-              </span>
-            )}
           </span>
         </div>
 
@@ -172,18 +134,9 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
                 <Play size={14} /> Empezar
               </span>
             ) : (
-              <>
-                <span className="routine-action-text">
-                  Tocar para completar <ArrowRight size={14} />
-                </span>
-                <button
-                  type="button"
-                  onClick={handleCustomizeValue}
-                  className="routine-action-secondary"
-                >
-                  Personalizar cantidad
-                </button>
-              </>
+              <span className="routine-action-text">
+                Tocar para completar <ArrowRight size={14} />
+              </span>
             )}
           </div>
         )}
@@ -194,26 +147,6 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
             userId={userId}
             routineTitle={routine.title}
             onUndo={handleUndoTimeout}
-          />
-        )}
-
-        {showValueModal && (
-          <ValueInputModal
-            routineTitle={routine.title}
-            minValue={routine.minValue}
-            unit={routine.unit}
-            onConfirm={handleConfirmValue}
-            onCancel={() => setShowValueModal(false)}
-          />
-        )}
-
-        {showEditModal && routine.todayLog && (
-          <EditValueModal
-            routineTitle={routine.title}
-            currentValue={routine.todayLog.value || routine.minValue}
-            unit={routine.unit}
-            onConfirm={handleEditValue}
-            onCancel={() => setShowEditModal(false)}
           />
         )}
       </div>

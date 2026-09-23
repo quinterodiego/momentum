@@ -39,11 +39,16 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
   };
 
   const handleSave = async (routineId: string) => {
+    const numMinValue = parseFloat(editMinValue);
+    if (!editTitle.trim() || !numMinValue || numMinValue <= 0) {
+      return;
+    }
+
     try {
       await updateUserRoutine(routineId, {
         title: editTitle,
         type: editType,
-        minValue: parseFloat(editMinValue) || 1,
+        minValue: numMinValue,
         unit: editType === 'time' ? 'min' : editUnit,
         scheduledDays: editScheduledDays.length === 7 ? [] : editScheduledDays,
       });
@@ -125,7 +130,9 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
                   onChange={(e) => setEditMinValue(e.target.value)}
                   className="onboarding-input"
                   style={{ flex: 1 }}
-                  min="1"
+                  min="0.1"
+                  step="0.1"
+                  required
                 />
                 {editType === 'quantity' && (
                   <input
@@ -148,6 +155,7 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <button
                   onClick={() => handleSave(routine.id)}
+                  disabled={!editTitle.trim() || !(parseFloat(editMinValue) > 0)}
                   className="btn btn-primary"
                   style={{ flex: 1, maxWidth: 'none', padding: '0.75rem' }}
                 >

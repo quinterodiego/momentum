@@ -19,13 +19,14 @@ export default function RoutineOnboardingForm({ userId }: RoutineOnboardingFormP
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!title.trim()) {
+
+    const numMinValue = parseFloat(minValue);
+    if (!title.trim() || !numMinValue || numMinValue <= 0) {
       return;
     }
 
     setIsLoading(true);
-    
+
     try {
       const response = await fetch('/api/routines/create', {
         method: 'POST',
@@ -34,7 +35,7 @@ export default function RoutineOnboardingForm({ userId }: RoutineOnboardingFormP
           userId,
           title: title.trim(),
           type,
-          minValue: parseFloat(minValue) || 1,
+          minValue: numMinValue,
           unit: type === 'time' ? 'min' : unit,
         }),
       });
@@ -99,9 +100,11 @@ export default function RoutineOnboardingForm({ userId }: RoutineOnboardingFormP
           type="number"
           value={minValue}
           onChange={(e) => setMinValue(e.target.value)}
-          min="1"
+          min="0.1"
+          step="0.1"
           className="onboarding-input"
           disabled={isLoading}
+          required
         />
       </div>
 
@@ -121,7 +124,7 @@ export default function RoutineOnboardingForm({ userId }: RoutineOnboardingFormP
 
       <button
         type="submit"
-        disabled={isLoading || !title.trim()}
+        disabled={isLoading || !title.trim() || !(parseFloat(minValue) > 0)}
         className="btn btn-primary onboarding-submit-btn"
       >
         {isLoading ? 'Creando...' : 'Crear rutina'}

@@ -18,6 +18,10 @@ export async function createUserRoutine(
   unit: string,
   scheduledDays: number[] = []
 ) {
+  if (!title.trim() || !minValue || minValue <= 0) {
+    throw new Error('title y minValue (> 0) son requeridos');
+  }
+
   try {
     await createRoutine(userId, title, type, minValue, unit, scheduledDays);
     // No redirigir, mantener en settings
@@ -34,6 +38,10 @@ export async function updateUserRoutine(
   routineId: string,
   updates: { title?: string; type?: 'time' | 'quantity'; minValue?: number; unit?: string; scheduledDays?: number[] }
 ) {
+  if (updates.minValue !== undefined && (!updates.minValue || updates.minValue <= 0)) {
+    throw new Error('minValue debe ser mayor a 0');
+  }
+
   try {
     await updateRoutine(routineId, updates);
   } catch (error) {

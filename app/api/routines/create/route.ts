@@ -17,9 +17,9 @@ export async function POST(request: NextRequest) {
     const userId = (session.user as any).id || session.user.email!;
     const { title, type, minValue, unit } = await request.json();
 
-    if (!title || !type || !minValue) {
+    if (!title || !type || typeof minValue !== 'number' || minValue <= 0) {
       return NextResponse.json(
-        { error: 'title, type y minValue son requeridos' },
+        { error: 'title, type y minValue (> 0) son requeridos' },
         { status: 400 }
       );
     }
