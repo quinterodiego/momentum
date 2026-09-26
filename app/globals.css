@@ -3040,6 +3040,225 @@ html {
   font-weight: 500;
 }
 
+.history-section-hint {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  margin-top: -1.125rem;
+  margin-bottom: 1.25rem;
+}
+
+/* === Cumplimiento por rutina (barras) === */
+
+.completion-chart {
+  padding: 1.5rem;
+  background: var(--green-card);
+  border-radius: 16px;
+  border: 1px solid rgba(6, 95, 70, 0.1);
+  box-shadow: 0 2px 8px rgba(6, 95, 70, 0.06);
+}
+
+.completion-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(6, 95, 70, 0.08);
+}
+
+.completion-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.completion-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.completion-chart-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.completion-bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.completion-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.completion-bar-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.completion-bar-value {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.completion-bar-track {
+  height: 10px;
+  border-radius: 4px;
+  background: rgba(6, 95, 70, 0.08);
+  overflow: hidden;
+}
+
+.completion-bar-fill {
+  height: 100%;
+  border-radius: 0 4px 4px 0;
+  transition: width 0.3s ease-out;
+}
+
+.completion-bar-caption {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+/* === Evolución de la racha (línea) === */
+
+.streak-chart {
+  padding: 1.5rem;
+  background: var(--green-card);
+  border-radius: 16px;
+  border: 1px solid rgba(6, 95, 70, 0.1);
+  box-shadow: 0 2px 8px rgba(6, 95, 70, 0.06);
+}
+
+.streak-chart-plot {
+  position: relative;
+  outline: none;
+}
+
+.streak-chart-plot:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.streak-chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: none;
+}
+
+.streak-chart-gridline {
+  stroke: rgba(6, 95, 70, 0.12);
+  stroke-width: 1;
+}
+
+.streak-chart-axis-label {
+  font-size: 9px;
+  fill: var(--text-tertiary);
+}
+
+.streak-chart-area {
+  fill: var(--color-primary);
+  opacity: 0.1;
+  stroke: none;
+}
+
+.streak-chart-line {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.streak-chart-crosshair {
+  stroke: var(--text-tertiary);
+  stroke-width: 1;
+}
+
+.streak-chart-dot {
+  fill: var(--color-primary);
+  stroke: var(--green-card);
+  stroke-width: 2;
+}
+
+.streak-chart-tooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 10px));
+  background: var(--text-primary);
+  color: var(--color-bg);
+  padding: 0.375rem 0.625rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.streak-chart-tooltip strong {
+  font-size: 0.875rem;
+}
+
+.streak-chart-table-toggle {
+  margin-top: 1rem;
+}
+
+.streak-chart-table-toggle summary {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.streak-chart-table-wrap {
+  margin-top: 0.75rem;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.streak-chart-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.streak-chart-table th,
+.streak-chart-table td {
+  text-align: left;
+  padding: 0.375rem 0.5rem;
+  border-bottom: 1px solid rgba(6, 95, 70, 0.08);
+  color: var(--text-secondary);
+}
+
+.streak-chart-table th {
+  color: var(--text-tertiary);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+  letter-spacing: 0.03em;
+}
+
 .days-list {
   display: flex;
   flex-direction: column;
@@ -3289,9 +3508,25 @@ html {
 }
 
 [data-theme="dark"] .streak-panel,
-[data-theme="dark"] .history-stats {
+[data-theme="dark"] .history-stats,
+[data-theme="dark"] .completion-chart,
+[data-theme="dark"] .streak-chart {
   border-color: rgba(255,255,255,0.07);
   box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+}
+
+[data-theme="dark"] .completion-chart-legend,
+[data-theme="dark"] .streak-chart-table th,
+[data-theme="dark"] .streak-chart-table td {
+  border-color: rgba(255,255,255,0.08);
+}
+
+[data-theme="dark"] .completion-bar-track {
+  background: rgba(255,255,255,0.08);
+}
+
+[data-theme="dark"] .streak-chart-gridline {
+  stroke: rgba(255,255,255,0.1);
 }
 
 [data-theme="dark"] .streak-item,

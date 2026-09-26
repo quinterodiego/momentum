@@ -3,13 +3,19 @@
  */
 
 import { redirect } from 'next/navigation';
-import { ArrowLeft, Calendar, Flame } from 'lucide-react';
+import { ArrowLeft, Calendar, Flame, BarChart3, TrendingUp } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth';
 import { getAllLogs } from '@/lib/sheets-routines';
 import { getUserRoutines } from '@/lib/sheets-routines';
 import { getStats } from '@/lib/sheets-routines';
+import { getRoutineCompletionRates, getStreakSeries } from '@/lib/stats';
 import ThemeToggle from '@/components/ThemeToggle';
+import RoutineCompletionChart from '@/components/charts/RoutineCompletionChart';
+import StreakTrendChart from '@/components/charts/StreakTrendChart';
 import type { DailyLog, Routine } from '@/lib/types';
+
+const COMPLETION_WINDOW_DAYS = 30;
+const STREAK_WINDOW_DAYS = 60;
 
 interface LogWithRoutine extends DailyLog {
   routine: Routine | null;
@@ -32,6 +38,8 @@ export default async function HistoryPage() {
   const allLogs = await getAllLogs(userId);
   const routines = await getUserRoutines(userId);
   const stats = await getStats(userId);
+  const completionRates = getRoutineCompletionRates(routines, allLogs, COMPLETION_WINDOW_DAYS);
+  const streakSeries = getStreakSeries(allLogs, STREAK_WINDOW_DAYS);
 
   // Crear un mapa de rutinas por ID
   const routinesMap = new Map(routines.map(r => [r.id, r]));
@@ -133,6 +141,26 @@ export default async function HistoryPage() {
               <div className="history-stat-label">Mejor racha</div>
             </div>
           </div>
+        </div>
+
+        {/* Evolución de la racha */}
+        <div className="history-section">
+          <h2 className="history-section-title">
+            <TrendingUp size={18} className="text-primary" style={{ marginRight: '0.5rem' }} />
+            Evolución de la racha
+          </h2>
+          <p className="history-section-hint">Últimos {STREAK_WINDOW_DAYS} días</p>
+          <StreakTrendChart data={streakSeries} />
+        </div>
+
+        {/* Cumplimiento por rutina */}
+        <div className="history-section">
+          <h2 className="history-section-title">
+            <BarChart3 size={18} className="text-primary" style={{ marginRight: '0.5rem' }} />
+            Cumplimiento por rutina
+          </h2>
+          <p className="history-section-hint">Últimos {COMPLETION_WINDOW_DAYS} días</p>
+          <RoutineCompletionChart data={completionRates} days={COMPLETION_WINDOW_DAYS} />
         </div>
 
         {/* Rachas históricas */}
