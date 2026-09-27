@@ -5,7 +5,7 @@
 
 import { redirect } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
-import { getUserRoutines } from '@/lib/sheets-routines';
+import { getUserRoutines } from '@/lib/db/routines';
 import { getCurrentUser } from '@/lib/auth';
 import RoutinesList from '@/components/RoutinesList';
 import CreateRoutineForm from '@/components/CreateRoutineForm';

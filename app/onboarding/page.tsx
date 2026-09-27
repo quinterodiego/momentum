@@ -5,7 +5,7 @@
 
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
-import { getUserRoutines } from '@/lib/sheets-routines';
+import { getUserRoutines } from '@/lib/db/routines';
 import { getCurrentUser } from '@/lib/auth';
 import RoutineOnboardingForm from '@/components/RoutineOnboardingForm';
 import LogoutButton from '@/components/LogoutButton';

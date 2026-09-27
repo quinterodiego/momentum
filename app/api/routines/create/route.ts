@@ -3,7 +3,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createRoutine } from '@/lib/sheets-routines';
+import { createRoutine } from '@/lib/db/routines';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 

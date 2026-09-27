@@ -7,11 +7,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "check-env": "node scripts/check-env.js"
+    "check-env": "node scripts/check-env.js",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
     "bcryptjs": "^3.0.3",
     "date-fns": "^3.0.6",
+    "drizzle-orm": "^0.45.3",
     "googleapis": "^126.0.1",
     "lucide-react": "^0.562.0",
     "next": "14.0.4",
@@ -26,6 +30,7 @@
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.16",
     "dotenv": "^16.6.1",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
     "typescript": "^5"

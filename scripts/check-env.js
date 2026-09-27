@@ -28,6 +28,7 @@ const requiredVars = [
   'GOOGLE_CLIENT_SECRET',
   'NEXTAUTH_URL',
   'NEXTAUTH_SECRET',
+  'DATABASE_URL',
 ];
 
 let allSet = true;

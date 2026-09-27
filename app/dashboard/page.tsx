@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import { ListPlus, History, Check } from 'lucide-react';
 import { getRoutinesWithStatus, getTodayDate, getTodayDayOfWeek } from '@/lib/routines';
-import { getStats } from '@/lib/sheets-routines';
+import { getStats } from '@/lib/db/routines';
 import { getCurrentUser } from '@/lib/auth';
 import RoutineCard from '@/components/RoutineCard';
 import StatsDisplay from '@/components/StatsDisplay';

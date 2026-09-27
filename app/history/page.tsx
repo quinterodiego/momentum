@@ -5,9 +5,9 @@
 import { redirect } from 'next/navigation';
 import { ArrowLeft, Calendar, Flame, BarChart3, TrendingUp } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth';
-import { getAllLogs } from '@/lib/sheets-routines';
-import { getUserRoutines } from '@/lib/sheets-routines';
-import { getStats } from '@/lib/sheets-routines';
+import { getAllLogs } from '@/lib/db/routines';
+import { getUserRoutines } from '@/lib/db/routines';
+import { getStats } from '@/lib/db/routines';
 import { getRoutineCompletionRates, getStreakSeries } from '@/lib/stats';
 import ThemeToggle from '@/components/ThemeToggle';
 import RoutineCompletionChart from '@/components/charts/RoutineCompletionChart';

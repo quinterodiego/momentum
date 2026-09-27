@@ -3,7 +3,7 @@
  * Maneja la obtención y actualización de rutinas y logs diarios
  */
 
-import { getUserRoutines, getTodayLogs, createDailyLog, updateStreak } from './sheets-routines';
+import { getUserRoutines, getTodayLogs, createDailyLog, updateStreak } from './db/routines';
 import type { Routine, DailyLog, RoutineWithStatus } from './types';
 
 /**
@@ -91,7 +91,7 @@ export async function hasCompletedAnyToday(userId: string): Promise<boolean> {
  * Se mantiene si no cumplió hoy (no se rompe hasta que pase el día)
  */
 export async function calculateStreak(userId: string): Promise<number> {
-  const { getStats } = await import('./sheets-routines');
+  const { getStats } = await import('./db/routines');
   const stats = await getStats(userId);
   const today = getTodayDate();
   const hasCompletedToday = await hasCompletedAnyToday(userId);

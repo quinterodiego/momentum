@@ -5,7 +5,7 @@
  */
 
 import { redirect } from 'next/navigation';
-import { getUserRoutines } from '@/lib/sheets-routines';
+import { getUserRoutines } from '@/lib/db/routines';
 import RoutineTimer from '@/components/RoutineTimer';
 import { getCurrentUser } from '@/lib/auth';
 

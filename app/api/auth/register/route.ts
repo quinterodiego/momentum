@@ -3,7 +3,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createUser } from '@/lib/sheets-users';
+import { createUser } from '@/lib/db/users';
 
 export async function POST(request: Request) {
   try {

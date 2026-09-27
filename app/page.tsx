@@ -13,7 +13,7 @@ export default async function Home() {
   // Si ya está logueado, redirigir según corresponda
   if (user) {
     try {
-      const { getUserRoutines } = await import('@/lib/sheets-routines');
+      const { getUserRoutines } = await import('@/lib/db/routines');
       const routines = await getUserRoutines(user.id);
       
       if (routines.length === 0) {

@@ -5,9 +5,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
-import { deleteDailyLog } from '@/lib/sheets-routines';
+import { deleteDailyLog } from '@/lib/db/routines';
 import { calculateStreak } from '@/lib/routines';
-import { getStats, updateStreak } from '@/lib/sheets-routines';
+import { getStats, updateStreak } from '@/lib/db/routines';
 
 export async function POST(request: NextRequest) {
   try {

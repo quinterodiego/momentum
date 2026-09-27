@@ -5,7 +5,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { createDailyLog, updateStreak, getStats } from '@/lib/sheets-routines';
+import { createDailyLog, updateStreak, getStats } from '@/lib/db/routines';
 import { calculateStreak, getTodayDate } from '@/lib/routines';
 
 /**

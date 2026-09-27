@@ -5,7 +5,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { createRoutine, updateRoutine, deactivateRoutine } from '@/lib/sheets-routines';
+import { createRoutine, updateRoutine, deactivateRoutine } from '@/lib/db/routines';
 
 /**
  * Crear una nueva rutina

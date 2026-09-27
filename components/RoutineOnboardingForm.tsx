@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Timer, Hash } from 'lucide-react';
-import { createRoutine } from '@/lib/sheets-routines';
 import { useRouter } from 'next/navigation';
 
 interface RoutineOnboardingFormProps {
