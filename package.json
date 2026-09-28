@@ -15,7 +15,6 @@
     "bcryptjs": "^3.0.3",
     "date-fns": "^3.0.6",
     "drizzle-orm": "^0.45.3",
-    "googleapis": "^126.0.1",
     "lucide-react": "^0.562.0",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
