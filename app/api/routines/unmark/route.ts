@@ -5,9 +5,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
-import { deleteDailyLog } from '@/lib/db/routines';
+import { deleteDailyLog, updateStreak } from '@/lib/db/routines';
 import { calculateStreak } from '@/lib/routines';
-import { getStats, updateStreak } from '@/lib/db/routines';
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,13 +23,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'logId es requerido' }, { status: 400 });
     }
 
-    // Marcar el log como no completado
-    await deleteDailyLog(logId);
-    
-    // Recalcular racha
-    const newStreak = await calculateStreak(userId);
-    const stats = await getStats(userId);
-    await updateStreak(userId, newStreak, stats.lastCompletedDate);
+    // Borrar el log, solo si es del usuario logueado
+    const deleted = await deleteDailyLog(logId, userId);
+    if (!deleted) {
+      return NextResponse.json({ error: 'Log no encontrado' }, { status: 404 });
+    }
+
+    // Recalcular racha desde los logs reales
+    const { streak, lastCompletedDate } = await calculateStreak(userId);
+    await updateStreak(userId, streak, lastCompletedDate);
 
     return NextResponse.json({ success: true });
   } catch (error) {

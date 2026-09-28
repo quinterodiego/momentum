@@ -5,8 +5,8 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { createDailyLog, updateStreak, getStats } from '@/lib/db/routines';
-import { calculateStreak, getTodayDate } from '@/lib/routines';
+import { createDailyLog, updateStreak } from '@/lib/db/routines';
+import { calculateStreak, getTodayDate, isBackfillableDate } from '@/lib/routines';
 
 /**
  * Completar una rutina time-based (desde el timer)
@@ -15,18 +15,21 @@ import { calculateStreak, getTodayDate } from '@/lib/routines';
 export async function completeTimeRoutine(
   routineId: string,
   userId: string,
-  value: number
+  value: number,
+  date: string = getTodayDate()
 ) {
+  if (!isBackfillableDate(date)) {
+    throw new Error('Fecha inválida');
+  }
+
   try {
-    const today = getTodayDate();
-    
     // Crear log de completado
-    const log = await createDailyLog(routineId, userId, today, true, value);
-    
-    // Actualizar racha
-    const newStreak = await calculateStreak(userId);
-    await updateStreak(userId, newStreak, today);
-    
+    const log = await createDailyLog(routineId, userId, date, true, value);
+
+    // Recalcular racha desde los logs reales
+    const { streak, lastCompletedDate } = await calculateStreak(userId);
+    await updateStreak(userId, streak, lastCompletedDate);
+
     // Retornar logId en lugar de redirigir (el componente manejará el redirect)
     return { success: true, logId: log.id };
   } catch (error) {
@@ -42,18 +45,21 @@ export async function completeTimeRoutine(
 export async function completeQuantityRoutine(
   routineId: string,
   userId: string,
-  value: number
+  value: number,
+  date: string = getTodayDate()
 ) {
+  if (!isBackfillableDate(date)) {
+    throw new Error('Fecha inválida');
+  }
+
   try {
-    const today = getTodayDate();
-    
     // Crear log de completado
-    const log = await createDailyLog(routineId, userId, today, true, value);
-    
-    // Actualizar racha
-    const newStreak = await calculateStreak(userId);
-    await updateStreak(userId, newStreak, today);
-    
+    const log = await createDailyLog(routineId, userId, date, true, value);
+
+    // Recalcular racha desde los logs reales
+    const { streak, lastCompletedDate } = await calculateStreak(userId);
+    await updateStreak(userId, streak, lastCompletedDate);
+
     // Retornar logId en lugar de redirigir (el componente manejará el redirect)
     return { success: true, logId: log.id };
   } catch (error) {

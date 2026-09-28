@@ -4,6 +4,7 @@
  */
 
 import { getTodayDate } from './routines';
+import { parseLocalDate, addDays, formatDate } from './date-utils';
 import type { DailyLog, Routine } from './types';
 
 export interface RoutineCompletionRate {
@@ -18,25 +19,6 @@ export interface RoutineCompletionRate {
 export interface StreakPoint {
   date: string; // YYYY-MM-DD
   streak: number;
-}
-
-function parseLocalDate(dateStr: string): Date {
-  const [year, month, day] = dateStr.split('-').map(Number);
-  // Mediodía local: evita que restar/sumar días cruce a otra fecha por TZ.
-  return new Date(year, month - 1, day, 12, 0, 0);
-}
-
-function addDays(date: Date, amount: number): Date {
-  const result = new Date(date);
-  result.setDate(result.getDate() + amount);
-  return result;
-}
-
-function formatDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
 }
 
 /**

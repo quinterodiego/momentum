@@ -3310,6 +3310,56 @@ html {
   border-radius: 12px;
 }
 
+.day-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.day-edit-link {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* === Editar un día (form de salto de fecha) === */
+
+.day-jump-form {
+  padding: 1.25rem 1.5rem;
+  background: var(--green-card);
+  border-radius: 16px;
+  border: 1px solid rgba(6, 95, 70, 0.1);
+  box-shadow: 0 2px 8px rgba(6, 95, 70, 0.06);
+}
+
+.day-jump-label {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.day-jump-controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.day-jump-controls .onboarding-input {
+  flex: 1;
+  min-width: 160px;
+}
+
+.day-jump-controls .btn {
+  max-width: none;
+  padding: 0.75rem 1.25rem;
+  white-space: nowrap;
+}
+
 .day-routines {
   display: flex;
   flex-direction: column;
@@ -3530,7 +3580,8 @@ html {
 }
 
 [data-theme="dark"] .streak-item,
-[data-theme="dark"] .day-item {
+[data-theme="dark"] .day-item,
+[data-theme="dark"] .day-jump-form {
   border-color: rgba(255,255,255,0.07);
   box-shadow: 0 2px 8px rgba(0,0,0,0.35);
 }

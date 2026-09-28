@@ -1,6 +1,7 @@
 'use client';
 
 import type { Stats } from '@/lib/types';
+import { parseLocalDate } from '@/lib/date-utils';
 
 interface StatsDisplayProps {
   stats: Stats;
@@ -16,7 +17,7 @@ export default function StatsDisplay({ stats }: StatsDisplayProps) {
       {stats.lastCompletedDate && (
         <div className="streak-panel-last">
           Último día:{' '}
-          {new Date(stats.lastCompletedDate).toLocaleDateString('es-AR', {
+          {parseLocalDate(stats.lastCompletedDate).toLocaleDateString('es-AR', {
             day: 'numeric',
             month: 'short',
           })}

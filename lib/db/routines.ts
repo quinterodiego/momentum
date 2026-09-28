@@ -77,21 +77,6 @@ export async function createRoutine(
 }
 
 /**
- * Obtener logs del día de hoy para un usuario
- */
-export async function getTodayLogs(userId: string): Promise<DailyLog[]> {
-  const { getTodayDate } = await import('../routines');
-  const today = getTodayDate();
-
-  const rows = await db
-    .select()
-    .from(dailyLogs)
-    .where(and(eq(dailyLogs.userId, userId), eq(dailyLogs.date, today)));
-
-  return rows.map(toDailyLog);
-}
-
-/**
  * Obtener todos los logs completados de un usuario (historial completo),
  * ordenados por fecha descendente (más reciente primero)
  */
@@ -161,10 +146,17 @@ export async function getStats(userId: string): Promise<Stats> {
 }
 
 /**
- * Eliminar un log diario (usado para desmarcar/deshacer una rutina cumplida)
+ * Eliminar un log diario (usado para desmarcar una rutina cumplida).
+ * Exige que el log sea del usuario dado; devuelve false si no existía o
+ * era de otro usuario (evita que un usuario borre logs ajenos).
  */
-export async function deleteDailyLog(logId: string): Promise<void> {
-  await db.delete(dailyLogs).where(eq(dailyLogs.id, logId));
+export async function deleteDailyLog(logId: string, userId: string): Promise<boolean> {
+  const result = await db
+    .delete(dailyLogs)
+    .where(and(eq(dailyLogs.id, logId), eq(dailyLogs.userId, userId)))
+    .returning({ id: dailyLogs.id });
+
+  return result.length > 0;
 }
 
 /**

@@ -9,9 +9,12 @@ import { getAllLogs } from '@/lib/db/routines';
 import { getUserRoutines } from '@/lib/db/routines';
 import { getStats } from '@/lib/db/routines';
 import { getRoutineCompletionRates, getStreakSeries } from '@/lib/stats';
+import { getTodayDate } from '@/lib/routines';
+import { parseLocalDate } from '@/lib/date-utils';
 import ThemeToggle from '@/components/ThemeToggle';
 import RoutineCompletionChart from '@/components/charts/RoutineCompletionChart';
 import StreakTrendChart from '@/components/charts/StreakTrendChart';
+import DayJumpForm from '@/components/DayJumpForm';
 import type { DailyLog, Routine } from '@/lib/types';
 
 const COMPLETION_WINDOW_DAYS = 30;
@@ -75,8 +78,8 @@ export default async function HistoryPage() {
     let currentStreakDays = 1;
 
     for (let i = 1; i < daySummaries.length; i++) {
-      const prevDate = new Date(daySummaries[i - 1].date);
-      const currDate = new Date(daySummaries[i].date);
+      const prevDate = parseLocalDate(daySummaries[i - 1].date);
+      const currDate = parseLocalDate(daySummaries[i].date);
       const daysDiff = Math.floor((prevDate.getTime() - currDate.getTime()) / (1000 * 60 * 60 * 24));
 
       if (daysDiff === 1) {
@@ -175,7 +178,7 @@ export default async function HistoryPage() {
                 <div key={index} className="streak-item">
                   <div className="streak-days">{streak.days} días</div>
                   <div className="streak-dates">
-                    {new Date(streak.startDate).toLocaleDateString('es-AR', {
+                    {parseLocalDate(streak.startDate).toLocaleDateString('es-AR', {
                       day: 'numeric',
                       month: 'short',
                       year: streak.startDate !== streak.endDate ? 'numeric' : undefined,
@@ -183,7 +186,7 @@ export default async function HistoryPage() {
                     {streak.startDate !== streak.endDate && (
                       <>
                         {' - '}
-                        {new Date(streak.endDate).toLocaleDateString('es-AR', {
+                        {parseLocalDate(streak.endDate).toLocaleDateString('es-AR', {
                           day: 'numeric',
                           month: 'short',
                         })}
@@ -195,6 +198,11 @@ export default async function HistoryPage() {
             </div>
           </div>
         )}
+
+        {/* Editar un día pasado */}
+        <div className="history-section">
+          <DayJumpForm maxDate={getTodayDate()} />
+        </div>
 
         {/* Historial por día */}
         <div className="history-section">
@@ -213,14 +221,17 @@ export default async function HistoryPage() {
                 <div key={day.date} className="day-item">
                   <div className="day-header">
                     <div className="day-date">
-                      {new Date(day.date).toLocaleDateString('es-AR', {
+                      {parseLocalDate(day.date).toLocaleDateString('es-AR', {
                         weekday: 'long',
                         day: 'numeric',
                         month: 'long',
                         year: 'numeric',
                       })}
                     </div>
-                    <div className="day-count">{day.completedCount} rutina{day.completedCount !== 1 ? 's' : ''}</div>
+                    <div className="day-header-actions">
+                      <div className="day-count">{day.completedCount} rutina{day.completedCount !== 1 ? 's' : ''}</div>
+                      <a href={`/day?date=${day.date}`} className="day-edit-link">Editar</a>
+                    </div>
                   </div>
                   <div className="day-routines">
                     {day.logs.map((log) => (
