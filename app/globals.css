@@ -735,71 +735,6 @@ a {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Racha (Home) - tratamiento humano, no administrativo */
-.streak-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.375rem;
-  padding: 1.75rem 1.5rem;
-  background: var(--green-card); /* Casi blanco */
-  border-radius: 20px;
-  border: 1px solid rgba(6, 95, 70, 0.1);
-  box-shadow: 0 2px 12px rgba(6, 95, 70, 0.06);
-  width: 100%;
-}
-
-@media (min-width: 768px) {
-  .dashboard-sidebar .streak-panel {
-    padding: 2.5rem 2rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .dashboard-sidebar .streak-panel {
-    padding: 3rem 2rem;
-  }
-}
-
-.streak-panel-value {
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1.15;
-  color: var(--text-primary);
-}
-
-@media (min-width: 768px) {
-  .dashboard-sidebar .streak-panel-value {
-    font-size: 2.75rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .dashboard-sidebar .streak-panel-value {
-    font-size: 3rem;
-  }
-}
-
-.streak-panel-label {
-  font-size: 0.9375rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.streak-panel-last {
-  font-size: 0.8125rem;
-  color: var(--text-tertiary);
-  font-weight: 400;
-  margin-top: 0.5rem;
-  padding-top: 0.625rem;
-  border-top: 1px solid rgba(6, 95, 70, 0.08);
-  width: 100%;
-}
-
-[data-theme="dark"] .streak-panel-last {
-  border-top-color: rgba(255, 255, 255, 0.07);
-}
 
 /* Timer styles */
 .timer-display {
@@ -866,10 +801,6 @@ a {
   .timer-display {
     font-size: 3.5rem;
   }
-  
-  .streak-panel-value {
-    font-size: 1.75rem;
-  }
 
   .dashboard-header {
     flex-direction: row;
@@ -896,12 +827,6 @@ a {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
-  }
-
-  .dashboard-content-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
   }
 
   .routines-list {
@@ -951,14 +876,9 @@ a {
     padding: 1.25rem 1.25rem;
   }
 
-  .streak-panel,
   .history-stats {
     padding: 1.25rem 1rem;
     gap: 1rem;
-  }
-
-  .streak-panel-value {
-    font-size: 1.5rem;
   }
 
   .history-hero-value {
@@ -2083,6 +2003,40 @@ html {
   background: rgba(255, 255, 255, 0.08);
 }
 
+/* Racha: métrica secundaria dentro del bloque de progreso, no una card
+   aparte — mismo tratamiento tipográfico que el resto del bloque, solo
+   con el número con un poco más de peso que el label. */
+.streak-inline {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(6, 95, 70, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.streak-inline-main {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.streak-inline-main strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.streak-inline-last {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+[data-theme="dark"] .streak-inline {
+  border-top-color: rgba(255, 255, 255, 0.07);
+}
+
 .header-icon {
   font-size: 1.25rem;
   color: var(--text-secondary);
@@ -2164,28 +2118,6 @@ html {
 
   .dashboard-page-header .header-actions {
     flex-basis: auto;
-  }
-}
-
-/* Dashboard Content Grid - Mobile-first, simple */
-.dashboard-content-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* Desktop: layout de 2 columnas aprovechando el ancho */
-@media (min-width: 1024px) {
-  .dashboard-content-grid {
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 2.5rem;
-    align-items: start;
-  }
-  
-  .dashboard-sidebar {
-    position: sticky;
-    top: 2rem;
   }
 }
 
@@ -3561,8 +3493,8 @@ html {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background: var(--color-active);
-  border: 1px solid var(--color-primary);
+  background: rgba(46, 204, 113, 0.06);
+  border: 1px solid rgba(46, 204, 113, 0.18);
   border-radius: 12px;
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
@@ -3570,7 +3502,7 @@ html {
 
 .monday-banner-text {
   font-size: 0.9rem;
-  color: var(--color-secondary);
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -3631,7 +3563,6 @@ html {
   border-color: rgba(46,204,113,0.25);
 }
 
-[data-theme="dark"] .streak-panel,
 [data-theme="dark"] .history-stats,
 [data-theme="dark"] .completion-chart,
 [data-theme="dark"] .streak-chart {

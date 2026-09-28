@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation';
 import { getUserRoutines } from '@/lib/db/routines';
 import RoutineTimer from '@/components/RoutineTimer';
 import { getCurrentUser } from '@/lib/auth';
+import { pluralizeUnit } from '@/lib/pluralize';
 
 export default async function FocusPage({
   searchParams,
@@ -43,7 +44,7 @@ export default async function FocusPage({
           <p className="focus-routine-label">Rutina</p>
           <p className="focus-routine-title">{routine.title}</p>
           <p className="focus-routine-minimum">
-            Mínimo: {routine.minValue} {routine.unit}
+            Mínimo: {routine.minValue} {pluralizeUnit(routine.minValue, routine.unit)}
           </p>
         </div>
 

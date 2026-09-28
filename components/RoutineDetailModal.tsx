@@ -3,6 +3,7 @@
 import { X, Timer, Hash, Check, XCircle } from 'lucide-react';
 import type { RoutineWithStatus } from '@/lib/types';
 import { useRouter } from 'next/navigation';
+import { pluralizeUnit } from '@/lib/pluralize';
 
 interface RoutineDetailModalProps {
   routine: RoutineWithStatus;
@@ -122,7 +123,7 @@ export default function RoutineDetailModal({
               <div className="routine-detail-item">
                 <span className="routine-detail-label">Mínimo:</span>
                 <span className="routine-detail-value">
-                  {routine.minValue} {routine.unit}
+                  {routine.minValue} {pluralizeUnit(routine.minValue, routine.unit)}
                 </span>
               </div>
 
@@ -130,7 +131,7 @@ export default function RoutineDetailModal({
                 <div className="routine-detail-item">
                   <span className="routine-detail-label">Cumpliste hoy:</span>
                   <span className="routine-detail-value routine-detail-completed">
-                    {routine.todayLog.value} {routine.unit}
+                    {routine.todayLog.value} {pluralizeUnit(routine.todayLog.value, routine.unit)}
                   </span>
                 </div>
               )}

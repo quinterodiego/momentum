@@ -5,6 +5,7 @@ import { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Check, ArrowRight, Play } from 'lucide-react';
 import type { RoutineWithStatus } from '@/lib/types';
+import { pluralizeUnit } from '@/lib/pluralize';
 import RoutineDetailModal from './RoutineDetailModal';
 import { CelebrationEffect } from './CelebrationEffect';
 
@@ -108,7 +109,10 @@ export default function RoutineCard({ routine, userId }: RoutineCardProps) {
         <div className="routine-value-block">
           <span className="routine-value-number">
             {routine.completed && routine.todayLog ? routine.todayLog.value : routine.minValue}{' '}
-            {routine.unit}
+            {pluralizeUnit(
+              routine.completed && routine.todayLog ? routine.todayLog.value : routine.minValue,
+              routine.unit
+            )}
           </span>
           <span className="routine-value-label">
             {routine.completed ? 'Cumplido hoy' : 'Mínimo de hoy'}

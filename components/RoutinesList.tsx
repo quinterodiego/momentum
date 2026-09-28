@@ -6,6 +6,7 @@ import { updateUserRoutine, deactivateUserRoutine } from '@/app/actions/routines
 import { useRouter } from 'next/navigation';
 import type { Routine } from '@/lib/types';
 import DaySelector from './DaySelector';
+import { pluralizeUnit } from '@/lib/pluralize';
 
 interface RoutinesListProps {
   routines: Routine[];
@@ -174,7 +175,7 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
                 <h3 className="routine-title" style={{ marginBottom: '0.5rem' }}>{routine.title}</h3>
                 <p className="routine-info-text" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   {routine.type === 'time' ? <Timer size={16} /> : <Hash size={16} />}
-                  Mínimo: {routine.minValue} {routine.unit}
+                  Mínimo: {routine.minValue} {pluralizeUnit(routine.minValue, routine.unit)}
                 </p>
                 <div style={{ marginTop: '0.5rem' }}>
                   <DaySelector
@@ -217,7 +218,7 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
                   {routine.title}
                 </h3>
                 <p className="routine-info-text" style={{ opacity: 0.5 }}>
-                  {routine.minValue} {routine.unit} (desactivada)
+                  {routine.minValue} {pluralizeUnit(routine.minValue, routine.unit)} (desactivada)
                 </p>
               </div>
             </div>

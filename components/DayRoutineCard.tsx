@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Check } from 'lucide-react';
 import type { RoutineWithStatus } from '@/lib/types';
+import { pluralizeUnit } from '@/lib/pluralize';
 
 interface DayRoutineCardProps {
   routine: RoutineWithStatus;
@@ -116,7 +117,10 @@ export default function DayRoutineCard({ routine, date, maxDate }: DayRoutineCar
       <div className="routine-value-block">
         <span className="routine-value-number">
           {routine.completed && routine.todayLog ? routine.todayLog.value : routine.minValue}{' '}
-          {routine.unit}
+          {pluralizeUnit(
+            routine.completed && routine.todayLog ? routine.todayLog.value : routine.minValue,
+            routine.unit
+          )}
         </span>
         <span className="routine-value-label">
           {routine.completed ? 'Cumplida ese día' : 'Mínimo'}

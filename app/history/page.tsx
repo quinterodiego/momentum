@@ -11,6 +11,7 @@ import { getStats } from '@/lib/db/routines';
 import { getRoutineCompletionRates, getStreakSeries } from '@/lib/stats';
 import { getTodayDate } from '@/lib/routines';
 import { parseLocalDate } from '@/lib/date-utils';
+import { pluralizeUnit } from '@/lib/pluralize';
 import ThemeToggle from '@/components/ThemeToggle';
 import RoutineCompletionChart from '@/components/charts/RoutineCompletionChart';
 import StreakTrendChart from '@/components/charts/StreakTrendChart';
@@ -240,7 +241,7 @@ export default async function HistoryPage() {
                           {log.routine?.title || 'Rutina eliminada'}
                         </span>
                         <span className="day-routine-value">
-                          {log.value} {log.routine?.unit || ''}
+                          {log.value} {log.routine ? pluralizeUnit(log.value, log.routine.unit) : ''}
                         </span>
                       </div>
                     ))}

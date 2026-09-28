@@ -9,8 +9,8 @@ import { ListPlus, History, Check } from 'lucide-react';
 import { getRoutinesWithStatus, getTodayDate, getTodayDayOfWeek } from '@/lib/routines';
 import { getStats } from '@/lib/db/routines';
 import { getCurrentUser } from '@/lib/auth';
+import { parseLocalDate } from '@/lib/date-utils';
 import RoutineCard from '@/components/RoutineCard';
-import StatsDisplay from '@/components/StatsDisplay';
 import LogoutButton from '@/components/LogoutButton';
 import ThemeToggle from '@/components/ThemeToggle';
 
@@ -101,6 +101,20 @@ export default async function DashboardPage({
               </div>
             </div>
           )}
+
+          <div className="streak-inline">
+            <span className="streak-inline-main">
+              <strong>{stats.streak}</strong> {stats.streak === 1 ? 'día' : 'días'} · Racha actual
+            </span>
+            {stats.lastCompletedDate && (
+              <span className="streak-inline-last">
+                Último día: {parseLocalDate(stats.lastCompletedDate).toLocaleDateString('es-AR', {
+                  day: 'numeric',
+                  month: 'short',
+                })}
+              </span>
+            )}
+          </div>
         </div>
 
         {isMonday && (
@@ -126,21 +140,10 @@ export default async function DashboardPage({
             </p>
           </div>
         ) : (
-          <div className="dashboard-content-grid">
-            <div className="routines-list">
-              {routines.map((routine) => (
-                <RoutineCard key={routine.id} routine={routine} userId={userId} />
-              ))}
-            </div>
-            <div className="dashboard-sidebar">
-              <StatsDisplay stats={stats} />
-            </div>
-          </div>
-        )}
-
-        {routines.length === 0 && (
-          <div className="mt-6">
-            <StatsDisplay stats={stats} />
+          <div className="routines-list">
+            {routines.map((routine) => (
+              <RoutineCard key={routine.id} routine={routine} userId={userId} />
+            ))}
           </div>
         )}
 
