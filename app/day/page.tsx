@@ -51,7 +51,9 @@ export default async function DayPage({
           <p className="subtitle-text" style={{ textTransform: 'capitalize' }}>
             {formattedDate}
           </p>
-          {isToday && <p className="history-section-hint">Es hoy — también lo podés hacer desde el dashboard</p>}
+          {isToday && (
+            <p className="day-today-hint">Es hoy — también lo podés hacer desde el dashboard</p>
+          )}
         </div>
 
         {routines.length === 0 ? (
@@ -61,7 +63,12 @@ export default async function DayPage({
         ) : (
           <div className="routines-list">
             {routines.map((routine) => (
-              <DayRoutineCard key={routine.id} routine={routine} date={date} />
+              <DayRoutineCard
+                key={routine.id}
+                routine={routine}
+                date={date}
+                maxDate={getTodayDate()}
+              />
             ))}
           </div>
         )}

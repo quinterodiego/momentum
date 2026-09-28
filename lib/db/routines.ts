@@ -124,6 +124,43 @@ export async function createDailyLog(
   return toDailyLog(row);
 }
 
+export type MoveDailyLogResult =
+  | { ok: true; log: DailyLog }
+  | { ok: false; reason: 'not_found' | 'conflict' };
+
+/**
+ * Cambiar la fecha de un log ya cargado (ej. se marcó un día equivocado).
+ * Exige que el log sea del usuario dado. Como daily_logs tiene constraint
+ * UNIQUE(routine_id, date), si la rutina ya tenía un log en la fecha
+ * destino, el UPDATE falla con conflicto (23505) en vez de pisarlo.
+ */
+export async function moveDailyLog(
+  logId: string,
+  userId: string,
+  newDate: string
+): Promise<MoveDailyLogResult> {
+  try {
+    const [row] = await db
+      .update(dailyLogs)
+      .set({ date: newDate })
+      .where(and(eq(dailyLogs.id, logId), eq(dailyLogs.userId, userId)))
+      .returning();
+
+    if (!row) {
+      return { ok: false, reason: 'not_found' };
+    }
+
+    return { ok: true, log: toDailyLog(row) };
+  } catch (error: any) {
+    // Drizzle envuelve el error de postgres-js en un DrizzleQueryError; el
+    // código de Postgres (23505 = unique_violation) queda en error.cause.
+    if (error?.code === '23505' || error?.cause?.code === '23505') {
+      return { ok: false, reason: 'conflict' };
+    }
+    throw error;
+  }
+}
+
 /**
  * Obtener estadísticas del usuario
  */

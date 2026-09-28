@@ -8,6 +8,7 @@ import type { RoutineWithStatus } from '@/lib/types';
 interface DayRoutineCardProps {
   routine: RoutineWithStatus;
   date: string;
+  maxDate: string;
 }
 
 /**
@@ -15,11 +16,15 @@ interface DayRoutineCardProps {
  * toque alterna cumplida/pendiente para `date` (no navega a /focus — no
  * tiene sentido cronometrar un día que ya pasó, se marca directo con el
  * mínimo, igual que ya hace el botón "Completar" del timer hoy). Sin
- * modal de detalle: acá alcanza con marcar/desmarcar.
+ * modal de detalle: acá alcanza con marcar/desmarcar, y si ya está
+ * cumplida, con moverla a otra fecha.
  */
-export default function DayRoutineCard({ routine, date }: DayRoutineCardProps) {
+export default function DayRoutineCard({ routine, date, maxDate }: DayRoutineCardProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [showMove, setShowMove] = useState(false);
+  const [moveDate, setMoveDate] = useState('');
+  const [moveError, setMoveError] = useState<string | null>(null);
 
   const handleClick = async () => {
     if (isLoading) return;
@@ -53,6 +58,33 @@ export default function DayRoutineCard({ routine, date }: DayRoutineCardProps) {
       }
     } catch (error) {
       console.error('Error editando rutina del día:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleMoveSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!moveDate || !routine.todayLog || isLoading) return;
+
+    setIsLoading(true);
+    setMoveError(null);
+    try {
+      const response = await fetch('/api/routines/move-log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ logId: routine.todayLog.id, date: moveDate }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        router.refresh();
+      } else {
+        setMoveError(result.error || 'No se pudo mover');
+      }
+    } catch (error) {
+      console.error('Error moviendo rutina de fecha:', error);
+      setMoveError('No se pudo mover');
     } finally {
       setIsLoading(false);
     }
@@ -100,6 +132,53 @@ export default function DayRoutineCard({ routine, date }: DayRoutineCardProps) {
             : 'Tocar para marcar cumplida'}
         </span>
       </div>
+
+      {routine.completed && !showMove && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowMove(true);
+          }}
+          className="day-move-trigger"
+        >
+          Mover a otro día
+        </button>
+      )}
+
+      {routine.completed && showMove && (
+        <form
+          onSubmit={handleMoveSubmit}
+          onClick={(e) => e.stopPropagation()}
+          className="day-move-form"
+        >
+          <input
+            type="date"
+            value={moveDate}
+            max={maxDate}
+            onChange={(e) => setMoveDate(e.target.value)}
+            className="onboarding-input"
+            required
+          />
+          <div className="day-move-actions">
+            <button type="submit" className="btn btn-primary" disabled={!moveDate || isLoading}>
+              Mover
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowMove(false);
+                setMoveError(null);
+              }}
+            >
+              Cancelar
+            </button>
+          </div>
+          {moveError && <p className="day-move-error">{moveError}</p>}
+        </form>
+      )}
     </div>
   );
 }
