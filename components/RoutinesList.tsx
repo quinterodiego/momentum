@@ -97,15 +97,14 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
                 className="onboarding-input"
                 style={{ marginBottom: '0.5rem' }}
               />
-              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+              <div className="onboarding-type-buttons" style={{ marginBottom: '0.5rem' }}>
                 <button
                   type="button"
                   onClick={() => {
                     setEditType('time');
                     setEditUnit('min');
                   }}
-                  className={`btn ${editType === 'time' ? 'btn-primary' : 'btn-secondary'}`}
-                  style={{ flex: 1, maxWidth: 'none', padding: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center' }}
+                  className={`onboarding-type-btn ${editType === 'time' ? 'onboarding-type-btn-active' : ''}`}
                 >
                   <Timer size={16} />
                   Tiempo
@@ -116,8 +115,7 @@ export default function RoutinesList({ routines, userId }: RoutinesListProps) {
                     setEditType('quantity');
                     if (editUnit === 'min') setEditUnit('vez');
                   }}
-                  className={`btn ${editType === 'quantity' ? 'btn-primary' : 'btn-secondary'}`}
-                  style={{ flex: 1, maxWidth: 'none', padding: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center' }}
+                  className={`onboarding-type-btn ${editType === 'quantity' ? 'onboarding-type-btn-active' : ''}`}
                 >
                   <Hash size={16} />
                   Cantidad

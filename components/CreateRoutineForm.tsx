@@ -75,15 +75,14 @@ export default function CreateRoutineForm({ userId }: CreateRoutineFormProps) {
 
       <div className="form-group">
         <label className="form-question-label">¿Cómo la medís?</label>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div className="onboarding-type-buttons">
           <button
             type="button"
             onClick={() => {
               setType('time');
               setUnit('min');
             }}
-            className={`btn ${type === 'time' ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ flex: 1, maxWidth: 'none', padding: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}
+            className={`onboarding-type-btn ${type === 'time' ? 'onboarding-type-btn-active' : ''}`}
           >
             <Timer size={18} />
             Tiempo
@@ -94,8 +93,7 @@ export default function CreateRoutineForm({ userId }: CreateRoutineFormProps) {
               setType('quantity');
               setUnit('vez');
             }}
-            className={`btn ${type === 'quantity' ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ flex: 1, maxWidth: 'none', padding: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}
+            className={`onboarding-type-btn ${type === 'quantity' ? 'onboarding-type-btn-active' : ''}`}
           >
             <Hash size={18} />
             Cantidad
@@ -119,7 +117,7 @@ export default function CreateRoutineForm({ userId }: CreateRoutineFormProps) {
             disabled={isLoading}
             required
           />
-          <span className="form-hint">{type === 'time' ? 'minutos' : unit || 'unidad'}</span>
+          {type === 'time' && <span className="form-hint">minutos</span>}
         </div>
 
         {type === 'quantity' && (
