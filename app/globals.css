@@ -1888,22 +1888,7 @@ html {
 
 @media (max-width: 480px) {
   .page-title {
-    font-size: 1.5rem;
-  }
-
-  .page-title-content {
-    gap: 0.5rem;
-  }
-
-  .page-title-icon {
-    width: 26px;
-    height: 26px;
-  }
-}
-
-@media (max-width: 360px) {
-  .page-title {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
   }
 
   .page-title-content {
@@ -1913,6 +1898,21 @@ html {
   .page-title-icon {
     width: 22px;
     height: 22px;
+  }
+}
+
+@media (max-width: 360px) {
+  .page-title {
+    font-size: 1.1rem;
+  }
+
+  .page-title-content {
+    gap: 0.35rem;
+  }
+
+  .page-title-icon {
+    width: 20px;
+    height: 20px;
   }
 }
 
