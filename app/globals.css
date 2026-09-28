@@ -2096,29 +2096,12 @@ html {
   }
 }
 
-/* Dashboard: el título (logo + "Momentum") y los íconos de acción del
-   header compiten por el mismo ancho, que está limitado por el
-   max-width de .card (420px) en TODO el rango 0-1023px de viewport (no
-   solo en mobile angosto). Una sola fila no alcanza de forma cómoda sin
-   achicar los tap targets, así que las acciones pasan a su propia fila
-   por debajo de 1024px. */
+/* Dashboard: logo+"Momentum" y los íconos de acción en una sola fila
+   en todos los anchos — en mobile angosto, .header-icon y los gaps se
+   achican un poco más (ver reglas de .header-icon/.header-actions en
+   los breakpoints de 480px/360px) para que entren sin apretarse. */
 .dashboard-page-header {
-  flex-wrap: wrap;
-}
-
-.dashboard-page-header .header-actions {
-  flex-basis: 100%;
-  justify-content: flex-end;
-}
-
-@media (min-width: 1024px) {
-  .dashboard-page-header {
-    flex-wrap: nowrap;
-  }
-
-  .dashboard-page-header .header-actions {
-    flex-basis: auto;
-  }
+  flex-wrap: nowrap;
 }
 
 .settings-icon {
