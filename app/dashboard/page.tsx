@@ -6,7 +6,7 @@
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import { ListPlus, History, Check } from 'lucide-react';
-import { getRoutinesWithStatus, getTodayDate, getTodayDayOfWeek } from '@/lib/routines';
+import { getRoutinesWithStatus } from '@/lib/routines';
 import { getStats } from '@/lib/db/routines';
 import { getCurrentUser } from '@/lib/auth';
 import { parseLocalDate } from '@/lib/date-utils';
@@ -26,10 +26,6 @@ export default async function DashboardPage({
   }
 
   const userId = user.id;
-  const today = getTodayDate();
-  const todayDayOfWeek = getTodayDayOfWeek();
-  const isMonday = todayDayOfWeek === 1;
-
   const routines = await getRoutinesWithStatus(userId);
   const stats = await getStats(userId);
 
@@ -116,13 +112,6 @@ export default async function DashboardPage({
             )}
           </div>
         </div>
-
-        {isMonday && (
-          <div className="monday-banner">
-            <span className="monday-banner-text">Es lunes — planificá los días de cada rutina</span>
-            <a href="/settings" className="monday-banner-link">Editar →</a>
-          </div>
-        )}
 
         {statusMessage && (
           <div className="status-message mb-4">
