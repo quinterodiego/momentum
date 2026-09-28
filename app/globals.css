@@ -82,15 +82,29 @@ a {
   z-index: 1;
 }
 
-/* Desktop: aprovechar todo el ancho del viewport */
+/* Desktop: usar el 100% del viewport (sin techo de ancho máximo) */
 @media (min-width: 1024px) {
   .container {
-    max-width: 1400px; /* Ancho máximo amplio */
+    max-width: 100%;
     width: 100%;
     padding: 4rem 3rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+  }
+}
+
+/* Pantallas muy anchas: más aire a los costados para que el contenido no
+   quede pegado al borde del viewport */
+@media (min-width: 1600px) {
+  .container {
+    padding: 4rem 5rem;
+  }
+}
+
+@media (min-width: 2000px) {
+  .container {
+    padding: 4rem 8rem;
   }
 }
 
@@ -2216,7 +2230,11 @@ html {
 @media (min-width: 1024px) {
   .settings-layout {
     display: grid;
-    grid-template-columns: 340px 1fr;
+    /* 380px, no 340px: a 340px con el padding del panel quedaban ~282px de
+       contenido, apenas menos que los ~286px que necesitan los 7 círculos
+       del selector de días en una sola fila (7 × 36px + 6 × 0.35rem gap),
+       y el 7º (Domingo) se iba a una segunda fila. */
+    grid-template-columns: 380px 1fr;
     gap: 2.5rem;
     align-items: start;
   }
