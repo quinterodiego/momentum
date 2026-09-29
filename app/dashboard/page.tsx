@@ -68,7 +68,7 @@ export default async function DashboardPage({
           </div>
         </div>
         
-        <div className="page-subtitle">
+        <div className="page-subtitle dashboard-status-block">
           <p className="subtitle-text">Hoy con lo mínimo alcanza</p>
           {totalCount > 0 && (
             <div className="today-progress">
@@ -100,7 +100,7 @@ export default async function DashboardPage({
 
           <div className="streak-inline">
             <span className="streak-inline-main">
-              <strong>{stats.streak}</strong> {stats.streak === 1 ? 'día' : 'días'} · Racha actual
+              <strong>{stats.streak} {stats.streak === 1 ? 'día' : 'días'}</strong> · Racha actual
             </span>
             {stats.lastCompletedDate && (
               <span className="streak-inline-last">

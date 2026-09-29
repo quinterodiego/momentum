@@ -2003,13 +2003,12 @@ html {
   background: rgba(255, 255, 255, 0.08);
 }
 
-/* Racha: métrica secundaria dentro del bloque de progreso, no una card
-   aparte — mismo tratamiento tipográfico que el resto del bloque, solo
-   con el número con un poco más de peso que el label. */
+/* Racha: métrica secundaria dentro del MISMO bloque que el progreso de
+   hoy (sin línea entre ambos — deben leerse como una sola unidad), no
+   una card aparte. Solo el valor de la racha ("1 día") tiene un poco
+   más de peso que el resto. */
 .streak-inline {
   margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid rgba(6, 95, 70, 0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2024,7 +2023,7 @@ html {
 
 .streak-inline-main strong {
   color: var(--text-primary);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .streak-inline-last {
@@ -2033,8 +2032,17 @@ html {
   font-weight: 400;
 }
 
-[data-theme="dark"] .streak-inline {
-  border-top-color: rgba(255, 255, 255, 0.07);
+/* La línea divisoria pasa a cerrar TODO el bloque de estado (progreso +
+   racha), no a separar el progreso de la racha. Clase propia del
+   dashboard: .page-subtitle es compartida por otras páginas y no debe
+   ganar este borde ahí. */
+.dashboard-status-block {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(6, 95, 70, 0.08);
+}
+
+[data-theme="dark"] .dashboard-status-block {
+  border-bottom-color: rgba(255, 255, 255, 0.07);
 }
 
 .header-icon {
